@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -15,10 +15,42 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { logout } from "@/lib/auth";
+import { getProfile } from "@/lib/user";
 
 export function HomeNavbar() {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [profileData, setProfileData] = useState({
+    firstName: "User",
+    lastName: "User",
+    username: "user",
+    email: "user@example.com",
+    avatar: "",
+  });
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const response = await getProfile();
+        console.log("Profile Data for Navbar: ", response);
+        if (response.success && response.data) {
+          const userData = response.data;
+          setProfileData((prev) => ({
+            ...prev,
+            firstName: userData.first_name || prev.firstName,
+            lastName: userData.last_name || prev.lastName,
+            username: userData.username || prev.username,
+            email: userData.email || prev.email,
+            avatar: userData.profilePicture || prev.avatar,
+          }));
+        }
+      } catch (error) {
+        console.log("Error fetching profile: ", error);
+      }
+    }
+
+    fetchProfile();
+  }, []);
 
   const handleLogout = async () => {
     await logout();
@@ -71,7 +103,18 @@ export function HomeNavbar() {
             >
               {/* Avatar */}
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold select-none">
-                C
+                {profileData.avatar ? (
+                  <img
+                    src={profileData.avatar}
+                    alt="Profile"
+                    className="h-8 w-8 rounded-full"
+                  />
+                ) : (
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold select-none">
+                    {profileData.firstName.charAt(0).toUpperCase() +
+                      profileData.lastName.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </div>
               <ChevronDown
                 className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-200 ${
@@ -92,14 +135,25 @@ export function HomeNavbar() {
                   {/* User info header */}
                   <div className="flex items-center gap-3 px-4 py-3 border-b border-border/50 bg-muted/30">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold">
-                      C
+                      {profileData.avatar ? (
+                        <img
+                          src={profileData.avatar}
+                          alt="Profile"
+                          className="h-8 w-8 rounded-full"
+                        />
+                      ) : (
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold select-none">
+                          {profileData.firstName.charAt(0).toUpperCase() +
+                            profileData.lastName.charAt(0).toUpperCase()}
+                        </div>
+                      )}
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-foreground truncate">
-                        Catlyne
+                        {profileData.firstName}
                       </p>
                       <p className="text-xs text-muted-foreground truncate">
-                        catlyne@example.com
+                        {profileData.username}
                       </p>
                     </div>
                   </div>
