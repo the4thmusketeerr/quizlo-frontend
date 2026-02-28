@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { GoeyToaster } from "@/components/ui/goey-toaster";
 
 import "./globals.css";
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#1E40AF",
-  colorScheme: "dark light",
+  colorScheme: "light dark",
   initialScale: 1,
   width: "device-width",
 };
@@ -30,11 +31,12 @@ export default function RootLayout({
       <body className={`${inter.className} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="light"
+          storageKey="quizlo-theme"
           disableTransitionOnChange
         >
           {children}
+          <GoeyToaster />
         </ThemeProvider>
       </body>
     </html>

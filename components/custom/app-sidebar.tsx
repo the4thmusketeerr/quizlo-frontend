@@ -5,8 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { goeyToast } from "@/components/ui/goey-toaster";
 import {
   Sidebar,
   SidebarContent,
@@ -69,13 +68,13 @@ export function AppSidebar() {
 
     try {
       await logout();
-      toast.success("Logged out successfully!");
+      goeyToast.success("Logged out successfully!");
 
       setTimeout(() => {
         router.push("/login");
       }, 500);
     } catch (error) {
-      toast.error("Logout failed, but you have been signed out locally");
+      goeyToast.error("Logout failed, but you have been signed out locally");
       setTimeout(() => {
         router.push("/login");
       }, 1000);
@@ -86,19 +85,6 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" variant="sidebar">
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
-
       {/* Header: Contains Hamburger Toggle & Branding */}
       <SidebarHeader className="border-b border-sidebar-border px-2 py-3">
         <div className="flex items-center gap-2 overflow-hidden">
@@ -116,7 +102,7 @@ export function AppSidebar() {
             </div>
             <div className="flex flex-col">
               <span className="whitespace-nowrap text-sm font-bold leading-tight text-sidebar-foreground">
-                QuizMind
+                Quizlo
               </span>
               <span className="whitespace-nowrap text-[10px] uppercase tracking-wider text-muted-foreground">
                 Learn Smart

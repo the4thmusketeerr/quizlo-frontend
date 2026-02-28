@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useState, Suspense } from "react";
+import { goeyToast } from "@/components/ui/goey-toaster";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -13,7 +12,7 @@ import { AnimatedCard } from "@/components/custom/animated-card";
 import { Zap, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { login, storeToken } from "@/lib/auth";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
@@ -38,10 +37,10 @@ export default function LoginPage() {
       }
 
       // Show success message
-      toast.success("Login successful! Redirecting...");
+      goeyToast.success("Login successful! Redirecting...");
 
       // Get redirect URL from query params or default to dashboard
-      const redirectTo = searchParams.get("redirect") || "/dashboard";
+      const redirectTo = searchParams.get("redirect") || "/home";
 
       // Redirect after a short delay
       setTimeout(() => {
@@ -50,9 +49,9 @@ export default function LoginPage() {
     } catch (error) {
       // Show error message
       if (error instanceof Error) {
-        toast.error(error.message);
+        goeyToast.error(error.message);
       } else {
-        toast.error("An unexpected error occurred. Please try again.");
+        goeyToast.error("An unexpected error occurred. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -61,18 +60,6 @@ export default function LoginPage() {
 
   return (
     <div className="space-y-6">
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       {/* Header */}
       <div className="text-center">
         <Link
@@ -113,10 +100,10 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
               <Link
-                href="#"
+                href="/forgot-password"
                 className="text-xs text-primary transition-smooth hover:text-accent"
               >
-                Forgot?
+                Forgot password?
               </Link>
             </div>
             <div className="relative">
@@ -186,7 +173,7 @@ export default function LoginPage() {
 
       {/* Sign Up Link */}
       <p className="text-center text-sm text-muted-foreground">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link
           href="/register"
           className="text-primary transition-smooth hover:text-accent"
@@ -195,5 +182,19 @@ export default function LoginPage() {
         </Link>
       </p>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center py-12">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import { MainLayout } from "@/components/custom/main-layout";
 import { AnimatedCard } from "@/components/custom/animated-card";
@@ -27,10 +27,18 @@ import {
   Sun,
   Moon,
   Monitor,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+  AlertCircle,
+  ChevronDown,
+  Upload,
+  ImageIcon,
+  X,
+  Loader2,
 } from "lucide-react";
-import { getProfile } from "@/lib/auth";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { getProfile, changePassword, uploadProfilePicture } from "@/lib/user";
+import { goeyToast } from "@/components/ui/goey-toaster";
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
@@ -51,6 +59,161 @@ export default function SettingsPage() {
     weeklyReports: true,
   });
 
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
+  const [isPasswordSectionOpen, setIsPasswordSectionOpen] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  // Avatar upload state
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const ALLOWED_FILE_TYPES = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+  ];
+  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      goeyToast.error("Please select a JPG, PNG, GIF, or WebP image.");
+      return;
+    }
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      goeyToast.error("Image must be less than 2MB.");
+      return;
+    }
+
+    // Show local preview immediately
+    const previewUrl = URL.createObjectURL(file);
+    setAvatarPreview(previewUrl);
+
+    // Upload to server
+    setIsUploadingAvatar(true);
+    try {
+      const response = await uploadProfilePicture(file);
+      if (response.success && response.data?.profilePicture) {
+        setProfileData((prev) => ({
+          ...prev,
+          avatar: response.data!.profilePicture,
+        }));
+        goeyToast.success("Profile picture updated!");
+      }
+    } catch (error) {
+      // Revert preview on failure
+      setAvatarPreview(null);
+      if (error instanceof Error) {
+        goeyToast.error(error.message);
+      } else {
+        goeyToast.error("Failed to upload profile picture.");
+      }
+    } finally {
+      setIsUploadingAvatar(false);
+      // Reset file input so the same file can be re-selected
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handleRemoveAvatar = () => {
+    setAvatarPreview(null);
+    setProfileData((prev) => ({ ...prev, avatar: "" }));
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const getPasswordStrength = (password: string) => {
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    if (score <= 1) return { label: "Weak", color: "bg-red-500", percent: 20 };
+    if (score === 2)
+      return { label: "Fair", color: "bg-orange-500", percent: 40 };
+    if (score === 3)
+      return { label: "Good", color: "bg-yellow-500", percent: 60 };
+    if (score === 4)
+      return { label: "Strong", color: "bg-emerald-500", percent: 80 };
+    return { label: "Very Strong", color: "bg-green-500", percent: 100 };
+  };
+
+  const passwordStrength = getPasswordStrength(passwordForm.newPassword);
+
+  const passwordChecks = [
+    {
+      label: "At least 8 characters",
+      met: passwordForm.newPassword.length >= 8,
+    },
+    {
+      label: "Contains uppercase letter",
+      met: /[A-Z]/.test(passwordForm.newPassword),
+    },
+    {
+      label: "Contains lowercase letter",
+      met: /[a-z]/.test(passwordForm.newPassword),
+    },
+    { label: "Contains a number", met: /[0-9]/.test(passwordForm.newPassword) },
+    {
+      label: "Contains special character",
+      met: /[^A-Za-z0-9]/.test(passwordForm.newPassword),
+    },
+  ];
+
+  const isPasswordFormValid =
+    passwordForm.currentPassword.length > 0 &&
+    passwordForm.newPassword.length >= 8 &&
+    passwordForm.newPassword === passwordForm.confirmPassword &&
+    passwordStrength.percent >= 60;
+
+  const handleChangePassword = async () => {
+    if (!isPasswordFormValid) return;
+
+    setIsChangingPassword(true);
+    try {
+      await changePassword({
+        currentPassword: passwordForm.currentPassword,
+        newPassword: passwordForm.newPassword,
+      });
+      goeyToast.success("Password changed successfully!");
+      setPasswordForm({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setIsPasswordSectionOpen(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        goeyToast.error(error.message);
+      } else {
+        goeyToast.error("Failed to change password. Please try again.");
+      }
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
   const [privacySettings, setPrivacySettings] = useState({
     profileVisibility: true,
     showQuizzes: true,
@@ -69,11 +232,12 @@ export default function SettingsPage() {
             lastName: userData.last_name || prev.lastName,
             username: userData.username || prev.username,
             email: userData.email || prev.email,
+            avatar: userData.profilePicture || prev.avatar,
           }));
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
-        toast.error("Failed to load profile data");
+        goeyToast.error("Failed to load profile data");
       }
     };
 
@@ -85,7 +249,7 @@ export default function SettingsPage() {
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
-      toast.success("Profile updated successfully!");
+      goeyToast.success("Profile updated successfully!");
     }, 1000);
   };
 
@@ -93,7 +257,7 @@ export default function SettingsPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      toast.success("Notification preferences updated!");
+      goeyToast.success("Notification preferences updated!");
     }, 1000);
   };
 
@@ -101,24 +265,12 @@ export default function SettingsPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      toast.success("Privacy settings updated!");
+      goeyToast.success("Privacy settings updated!");
     }, 1000);
   };
 
   return (
     <MainLayout>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <div className="px-6 py-6">
         {/* Header */}
         <div className="mb-8">
@@ -180,24 +332,91 @@ export default function SettingsPage() {
 
                 {/* Avatar Section */}
                 <div className="flex items-center gap-6">
-                  <Avatar className="h-24 w-24">
-                    <AvatarImage src={profileData.avatar} />
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-2xl">
-                      {profileData.firstName?.[0] ?? "?"}
-                      {profileData.lastName?.[0] ?? ""}
-                    </AvatarFallback>
-                  </Avatar>
+                  {/* Hidden file input */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                    id="avatar-upload"
+                  />
+
+                  {/* Clickable Avatar with Camera Overlay */}
+                  <div className="relative group">
+                    <Avatar
+                      className="h-24 w-24 cursor-pointer ring-2 ring-transparent group-hover:ring-primary/50 transition-all duration-300"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <AvatarImage src={avatarPreview || profileData.avatar} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-2xl">
+                        {profileData.firstName?.[0] ?? "?"}
+                        {profileData.lastName?.[0] ?? ""}
+                      </AvatarFallback>
+                    </Avatar>
+
+                    {/* Camera Overlay */}
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isUploadingAvatar}
+                      className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                    >
+                      {isUploadingAvatar ? (
+                        <Loader2 className="h-6 w-6 text-white animate-spin" />
+                      ) : (
+                        <Camera className="h-6 w-6 text-white" />
+                      )}
+                    </button>
+
+                    {/* Upload Indicator Badge */}
+                    {isUploadingAvatar && (
+                      <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-primary flex items-center justify-center ring-2 ring-background">
+                        <Loader2 className="h-3.5 w-3.5 text-primary-foreground animate-spin" />
+                      </div>
+                    )}
+                  </div>
+
                   <div className="space-y-2">
                     <h4 className="font-medium text-foreground">
                       {profileData.username}
                     </h4>
                     <p className="text-sm text-muted-foreground">
-                      JPG, PNG or GIF. Max size 2MB
+                      JPG, PNG, GIF or WebP. Max size 2MB
                     </p>
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Camera className="h-4 w-4" />
-                      Change Avatar
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-2"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isUploadingAvatar}
+                      >
+                        {isUploadingAvatar ? (
+                          <>
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="h-3.5 w-3.5" />
+                            Change Avatar
+                          </>
+                        )}
+                      </Button>
+                      {(avatarPreview || profileData.avatar) && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="gap-1.5 text-muted-foreground hover:text-destructive"
+                          onClick={handleRemoveAvatar}
+                          disabled={isUploadingAvatar}
+                        >
+                          <X className="h-3.5 w-3.5" />
+                          Remove
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -294,7 +513,6 @@ export default function SettingsPage() {
                     disabled={isLoading}
                     className="gap-2"
                   >
-                    <Save className="h-4 w-4" />
                     {isLoading ? "Saving..." : "Save Changes"}
                   </GradientButton>
                 </div>
@@ -316,21 +534,272 @@ export default function SettingsPage() {
                 <Separator />
 
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20">
-                        <Lock className="h-5 w-5 text-primary" />
+                  {/* Change Password Section */}
+                  <div className="border rounded-lg overflow-hidden transition-all duration-300">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setIsPasswordSectionOpen(!isPasswordSectionOpen)
+                      }
+                      className="flex items-center justify-between w-full p-4 hover:bg-muted/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20">
+                          <Lock className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="text-left">
+                          <p className="font-medium text-foreground">
+                            Change Password
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Update your password to keep your account secure
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-foreground">Password</p>
-                        <p className="text-sm text-muted-foreground">
-                          Last changed 3 months ago
-                        </p>
+                      <ChevronDown
+                        className={`h-5 w-5 text-muted-foreground transition-transform duration-300 ${
+                          isPasswordSectionOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {/* Expandable Password Form */}
+                    <div
+                      className={`grid transition-all duration-300 ease-in-out ${
+                        isPasswordSectionOpen
+                          ? "grid-rows-[1fr] opacity-100"
+                          : "grid-rows-[0fr] opacity-0"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <div className="px-4 pb-5 pt-2 space-y-5 border-t">
+                          {/* Current Password */}
+                          <div className="space-y-2">
+                            <Label htmlFor="currentPassword">
+                              Current Password
+                            </Label>
+                            <div className="relative">
+                              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                              <Input
+                                id="currentPassword"
+                                type={
+                                  showPasswords.current ? "text" : "password"
+                                }
+                                value={passwordForm.currentPassword}
+                                onChange={(e) =>
+                                  setPasswordForm({
+                                    ...passwordForm,
+                                    currentPassword: e.target.value,
+                                  })
+                                }
+                                placeholder="Enter your current password"
+                                className="pl-9 pr-10"
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setShowPasswords({
+                                    ...showPasswords,
+                                    current: !showPasswords.current,
+                                  })
+                                }
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                              >
+                                {showPasswords.current ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4" />
+                                )}
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* New Password */}
+                          <div className="space-y-2">
+                            <Label htmlFor="newPassword">New Password</Label>
+                            <div className="relative">
+                              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                              <Input
+                                id="newPassword"
+                                type={showPasswords.new ? "text" : "password"}
+                                value={passwordForm.newPassword}
+                                onChange={(e) =>
+                                  setPasswordForm({
+                                    ...passwordForm,
+                                    newPassword: e.target.value,
+                                  })
+                                }
+                                placeholder="Enter your new password"
+                                className="pl-9 pr-10"
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setShowPasswords({
+                                    ...showPasswords,
+                                    new: !showPasswords.new,
+                                  })
+                                }
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                              >
+                                {showPasswords.new ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4" />
+                                )}
+                              </button>
+                            </div>
+
+                            {/* Password Strength Bar */}
+                            {passwordForm.newPassword.length > 0 && (
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs text-muted-foreground">
+                                    Password strength
+                                  </span>
+                                  <span
+                                    className={`text-xs font-medium ${
+                                      passwordStrength.percent <= 20
+                                        ? "text-red-500"
+                                        : passwordStrength.percent <= 40
+                                          ? "text-orange-500"
+                                          : passwordStrength.percent <= 60
+                                            ? "text-yellow-500"
+                                            : "text-green-500"
+                                    }`}
+                                  >
+                                    {passwordStrength.label}
+                                  </span>
+                                </div>
+                                <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+                                  <div
+                                    className={`h-full rounded-full transition-all duration-500 ease-out ${passwordStrength.color}`}
+                                    style={{
+                                      width: `${passwordStrength.percent}%`,
+                                    }}
+                                  />
+                                </div>
+
+                                {/* Password Requirements Checklist */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
+                                  {passwordChecks.map((check) => (
+                                    <div
+                                      key={check.label}
+                                      className="flex items-center gap-1.5"
+                                    >
+                                      {check.met ? (
+                                        <CheckCircle2 className="h-3.5 w-3.5 text-green-500 shrink-0" />
+                                      ) : (
+                                        <AlertCircle className="h-3.5 w-3.5 text-muted-foreground/50 shrink-0" />
+                                      )}
+                                      <span
+                                        className={`text-xs ${
+                                          check.met
+                                            ? "text-green-500"
+                                            : "text-muted-foreground/50"
+                                        }`}
+                                      >
+                                        {check.label}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Confirm Password */}
+                          <div className="space-y-2">
+                            <Label htmlFor="confirmPassword">
+                              Confirm New Password
+                            </Label>
+                            <div className="relative">
+                              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                              <Input
+                                id="confirmPassword"
+                                type={
+                                  showPasswords.confirm ? "text" : "password"
+                                }
+                                value={passwordForm.confirmPassword}
+                                onChange={(e) =>
+                                  setPasswordForm({
+                                    ...passwordForm,
+                                    confirmPassword: e.target.value,
+                                  })
+                                }
+                                placeholder="Confirm your new password"
+                                className={`pl-9 pr-10 ${
+                                  passwordForm.confirmPassword.length > 0 &&
+                                  passwordForm.confirmPassword !==
+                                    passwordForm.newPassword
+                                    ? "border-red-500 focus-visible:ring-red-500"
+                                    : passwordForm.confirmPassword.length > 0 &&
+                                        passwordForm.confirmPassword ===
+                                          passwordForm.newPassword
+                                      ? "border-green-500 focus-visible:ring-green-500"
+                                      : ""
+                                }`}
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setShowPasswords({
+                                    ...showPasswords,
+                                    confirm: !showPasswords.confirm,
+                                  })
+                                }
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                              >
+                                {showPasswords.confirm ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4" />
+                                )}
+                              </button>
+                            </div>
+                            {passwordForm.confirmPassword.length > 0 &&
+                              passwordForm.confirmPassword !==
+                                passwordForm.newPassword && (
+                                <p className="text-xs text-red-500 flex items-center gap-1">
+                                  <AlertCircle className="h-3 w-3" />
+                                  Passwords do not match
+                                </p>
+                              )}
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="flex justify-end gap-3 pt-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setPasswordForm({
+                                  currentPassword: "",
+                                  newPassword: "",
+                                  confirmPassword: "",
+                                });
+                                setIsPasswordSectionOpen(false);
+                              }}
+                            >
+                              Cancel
+                            </Button>
+                            <GradientButton
+                              onClick={handleChangePassword}
+                              disabled={
+                                !isPasswordFormValid || isChangingPassword
+                              }
+                              className="gap-2"
+                              size="sm"
+                            >
+                              <Lock className="h-3.5 w-3.5" />
+                              {isChangingPassword
+                                ? "Updating..."
+                                : "Update Password"}
+                            </GradientButton>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm">
-                      Change Password
-                    </Button>
                   </div>
 
                   <div className="flex items-center justify-between p-4 border rounded-lg">

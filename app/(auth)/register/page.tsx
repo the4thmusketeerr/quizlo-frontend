@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { passwordStrength } from "check-password-strength";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { goeyToast } from "@/components/ui/goey-toaster";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -13,7 +12,7 @@ import { GradientButton } from "@/components/custom/gradient-button";
 import { AnimatedCard } from "@/components/custom/animated-card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Zap, ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { signup } from "@/lib/auth";
+import { signup, storeToken } from "@/lib/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -66,11 +65,11 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
+      goeyToast.error("Passwords do not match");
       return;
     }
     if (!formData.agreeToTerms) {
-      toast.error("Please agree to the terms and conditions");
+      goeyToast.error("Please agree to the terms and conditions");
       return;
     }
 
@@ -86,8 +85,13 @@ export default function RegisterPage() {
         password: formData.password,
       });
 
+      // Store the token returned by the signup endpoint
+      if (response.token) {
+        storeToken(response.token);
+      }
+
       // Show success message
-      toast.success("Account created successfully! Redirecting to login...");
+      goeyToast.success("Account created successfully! Redirecting...");
 
       // Clear form
       setFormData({
@@ -100,16 +104,16 @@ export default function RegisterPage() {
         agreeToTerms: false,
       });
 
-      // Redirect to login page after a short delay
+      // Redirect to home page after a short delay
       setTimeout(() => {
-        router.push("/login");
+        router.push("/home");
       }, 1500);
     } catch (error) {
       // Show error message
       if (error instanceof Error) {
-        toast.error(error.message);
+        goeyToast.error(error.message);
       } else {
-        toast.error("An unexpected error occurred. Please try again.");
+        goeyToast.error("An unexpected error occurred. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -118,18 +122,6 @@ export default function RegisterPage() {
 
   return (
     <div className="space-y-6">
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       {/* Header */}
       <div className="text-center">
         <Link

@@ -48,12 +48,21 @@ export interface ErrorResponse {
   error?: string;
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  password: string;
+}
+
 /**
  * Sign up a new user
  */
 export async function signup(data: SignupRequest): Promise<AuthResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/user/signup`, {
+    const response = await fetch(`${API_BASE_URL}/auth/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +90,7 @@ export async function signup(data: SignupRequest): Promise<AuthResponse> {
  */
 export async function login(data: LoginRequest): Promise<AuthResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/user/login`, {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -107,43 +116,13 @@ export async function login(data: LoginRequest): Promise<AuthResponse> {
 }
 
 /**
- * Fetch current user profile
- */
-export async function getProfile(): Promise<AuthResponse> {
-  try {
-    const token = getToken();
-
-    const response = await fetch(`${API_BASE_URL}/user/profile`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.message || "Failed to fetch profile.");
-    }
-
-    return result;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-    throw new Error("An unexpected error occurred while fetching profile.");
-  }
-}
-
-/**
  * Logout the current user
  */
 export async function logout(): Promise<void> {
   try {
     const token = getToken();
 
-    const response = await fetch(`${API_BASE_URL}/user/logout`, {
+    const response = await fetch(`${API_BASE_URL}/auth/logout`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -161,6 +140,70 @@ export async function logout(): Promise<void> {
     // Always clear token even if request fails
     clearToken();
     console.error("Logout error:", error);
+  }
+}
+
+/**
+ * Request a password reset email
+ */
+export async function forgotPassword(
+  email: string,
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        result.message || "Failed to send reset email. Please try again.",
+      );
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unexpected error occurred.");
+  }
+}
+
+/**
+ * Reset a user's password using a valid token
+ */
+export async function resetPassword(
+  data: ResetPasswordRequest,
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        result.message || "Password reset failed. The link may have expired.",
+      );
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unexpected error occurred.");
   }
 }
 

@@ -12,7 +12,69 @@
 
 @layer base {
   :root {
-    /* Brand Colors - Dark Mode Primary */
+    /* Light Mode (White Primary Background) */
+    --background: 0 0% 100%;
+    --foreground: 217 33% 12%;
+    --card: 0 0% 98%;
+    --card-foreground: 217 33% 12%;
+
+    /* Primary Brand Color */
+    --primary: 218 100% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary Brand Color */
+    --secondary: 217 100% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Accent - Cyan */
+    --accent: 184 100% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Muted & Text Hierarchy */
+    --muted: 210 20% 94%;
+    --muted-foreground: 217 15% 45%;
+
+    /* UI Elements */
+    --popover: 0 0% 100%;
+    --popover-foreground: 217 33% 12%;
+
+    /* Semantic Colors */
+    --success: 142 76% 36%;
+    --warning: 38 92% 50%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Input */
+    --border: 217 20% 88%;
+    --input: 217 20% 90%;
+    --ring: 218 100% 35%;
+
+    /* Chart Colors */
+    --chart-1: 218 100% 35%;
+    --chart-2: 184 100% 40%;
+    --chart-3: 142 76% 36%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 0 84% 60%;
+
+    /* Sidebar - Matches brand (light) */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 217 33% 12%;
+    --sidebar-primary: 218 100% 35%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 184 100% 40%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 217 20% 88%;
+    --sidebar-ring: 218 100% 35%;
+
+    /* Border Radius */
+    --radius: 0.75rem;
+
+    /* Font Family */
+    --font-sans: "Inter", sans-serif;
+  }
+
+  /* Dark mode */
+  .dark {
     --background: 217 33% 9.4%;
     --foreground: 210 40% 96%;
     --card: 217 33% 17%;
@@ -65,41 +127,6 @@
     --sidebar-accent-foreground: 217 33% 9.4%;
     --sidebar-border: 217 33% 25%;
     --sidebar-ring: 184 100% 50%;
-
-    /* Border Radius */
-    --radius: 0.75rem;
-
-    /* Font Family */
-    --font-sans: "Inter", sans-serif;
-  }
-
-  /* Light mode */
-  .light {
-    --background: 0 0% 100%;
-    --foreground: 217 33% 17%;
-    --card: 0 0% 96%;
-    --card-foreground: 217 33% 17%;
-    --primary: 218 100% 35%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 217 100% 50%;
-    --secondary-foreground: 0 0% 100%;
-    --accent: 184 100% 40%;
-    --accent-foreground: 0 0% 100%;
-    --muted: 217 10% 65%;
-    --muted-foreground: 217 5% 40%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 217 33% 17%;
-    --border: 217 33% 85%;
-    --input: 217 33% 90%;
-    --ring: 218 100% 35%;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 217 33% 17%;
-    --sidebar-primary: 218 100% 35%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 184 100% 40%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 217 33% 85%;
-    --sidebar-ring: 218 100% 35%;
   }
 }
 
@@ -181,5 +208,14 @@
 
   .animation-delay-2000 {
     animation-delay: 2s;
+  }
+
+  /* Hide scrollbar while keeping scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
