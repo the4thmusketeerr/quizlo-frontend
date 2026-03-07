@@ -37,7 +37,7 @@ import {
   X,
   Loader2,
 } from "lucide-react";
-import { getProfile, changePassword, uploadProfilePicture } from "@/lib/user";
+import { getProfile, changePassword, uploadProfilePicture, deleteProfilePicture } from "@/lib/user";
 import { goeyToast } from "@/components/ui/goey-toaster";
 
 export default function SettingsPage() {
@@ -133,11 +133,24 @@ export default function SettingsPage() {
     }
   };
 
-  const handleRemoveAvatar = () => {
-    setAvatarPreview(null);
-    setProfileData((prev) => ({ ...prev, avatar: "" }));
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+  const handleRemoveAvatar = async () => {
+    try{
+      const response = await deleteProfilePicture();
+      if(response.success){
+        setProfileData((prev) => ({
+          ...prev,
+          avatar: "",
+        }));
+        goeyToast.success("Profile picture removed!");
+      }
+    }
+    catch(error)
+    {
+      if(error instanceof Error){
+        goeyToast.error(error.message);
+      }else{
+        goeyToast.error("Failed to remove profile picture.");
+      }
     }
   };
 
@@ -226,10 +239,11 @@ export default function SettingsPage() {
         const response = await getProfile();
         if (response.success && response.data) {
           const userData = response.data;
+          console.log("settings profile data:",userData);
           setProfileData((prev) => ({
             ...prev,
-            firstName: userData.first_name || prev.firstName,
-            lastName: userData.last_name || prev.lastName,
+            firstName: userData.firstName || prev.firstName,
+            lastName: userData.lastName || prev.lastName,
             username: userData.username || prev.username,
             email: userData.email || prev.email,
             avatar: userData.profilePicture || prev.avatar,
@@ -408,7 +422,7 @@ export default function SettingsPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="gap-1.5 text-muted-foreground hover:text-destructive"
+                          className="gap-1.5 text-muted-foreground hover:text-white hover:bg-red-500"
                           onClick={handleRemoveAvatar}
                           disabled={isUploadingAvatar}
                         >

@@ -1,9 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronRight, Plus, Users, Compass, Star, Gamepad2 } from "lucide-react";
+import {
+  ChevronRight,
+  Plus,
+  Users,
+  Compass,
+  Star,
+  Gamepad2,
+} from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { getProfile } from "@/lib/user";
-import { useEffect, useState} from "react";
+import { useEffect, useState, Suspense } from "react";
 
 // ── Quick‑action items ───────────────────────────────────────────────────────
 
@@ -50,13 +58,26 @@ const quickActions = [
   },
 ];
 
-
-
-
-
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center py-12">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
+      }
+    >
+      <HomeContent />
+    </Suspense>
+  );
+}
+
+function HomeContent() {
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from"); // "signup" | "login" | null
+
   const userName = "Alex";
   const currentXP = 0;
   const maxXP = 500;
@@ -71,32 +92,27 @@ export default function HomePage() {
   });
 
   useEffect(() => {
-  async function fetchProfile(){
-    try{
-      const response = await getProfile();
-      console.log("Profile Data: ",response);
-      if(response.success && response.data){
-        const userData = response.data;
-         setProfileData((prev) => ({
+    async function fetchProfile() {
+      try {
+        const response = await getProfile();
+        console.log("Profile Data: ", response);
+        if (response.success && response.data) {
+          const userData = response.data;
+          setProfileData((prev) => ({
             ...prev,
-            firstName: userData.first_name || prev.firstName,
+            firstName: userData.firstName || prev.firstName,
             username: userData.username || prev.username,
             email: userData.email || prev.email,
             avatar: userData.profilePicture || prev.avatar,
           }));
+        }
+      } catch (error) {
+        console.log("Error fetching profile: ", error);
       }
-
-    }catch(error){
-      console.log("Error fetching profile: ",error);
     }
 
-  };
-
-  fetchProfile();
-},[])
-
-
-  
+    fetchProfile();
+  }, []);
 
   return (
     <div className="flex flex-col items-center pb-12 px-4">
@@ -134,24 +150,34 @@ export default function HomePage() {
 
       {/* ── Welcome text ── */}
       <div className="mt-6 text-center animate-slide-up">
-        <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-          Welcome to Quizlo, {profileData.firstName}!{" "}
-          <span role="img" aria-label="party popper">
-            🎉
-          </span>
-        </h1>
-        <p className="mt-1.5 text-sm text-muted-foreground font-medium tracking-wide">
-          Learn. Compete. Level Up.
-        </p>
+        {from === "login" ? (
+          <>
+            <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+              Welcome back, {profileData.firstName}!{" "}
+              <span role="img" aria-label="waving hand">
+                👋
+              </span>
+            </h1>
+            <p className="mt-1.5 text-sm text-muted-foreground font-medium tracking-wide">
+              Ready to pick up where you left off?
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+              Welcome to Quizlo, {profileData.firstName}!{" "}
+              <span role="img" aria-label="party popper">
+                🎉
+              </span>
+            </h1>
+            <p className="mt-1.5 text-sm text-muted-foreground font-medium tracking-wide">
+              Learn. Compete. Level Up.
+            </p>
+          </>
+        )}
       </div>
 
-      {/* ── Start Quiz CTA ── */}
-      <Link
-        href="/quiz/start"
-        className="mt-6 w-full max-w-md rounded-full bg-gradient-to-r from-teal-400 to-cyan-500 dark:from-teal-500 dark:to-cyan-600 px-8 py-3.5 text-center text-base font-bold text-white shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/35 hover:-translate-y-0.5 transition-all duration-300 animate-scale-in"
-      >
-        Start Your First Quiz
-      </Link>
+      
 
       {/* ── Quick Actions ── */}
       <div className="mt-10 w-full max-w-md animate-slide-up animation-delay-200">

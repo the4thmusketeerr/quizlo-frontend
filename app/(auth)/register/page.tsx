@@ -106,7 +106,7 @@ export default function RegisterPage() {
 
       // Redirect to home page after a short delay
       setTimeout(() => {
-        router.push("/home");
+        router.push("/home?from=signup");
       }, 1500);
     } catch (error) {
       // Show error message

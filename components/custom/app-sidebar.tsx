@@ -39,11 +39,6 @@ const navItems = [
     icon: BookOpen,
   },
   {
-    label: "Create Quiz",
-    href: "/quiz/generator",
-    icon: Zap,
-  },
-  {
     label: "Analytics",
     href: "/analytics",
     icon: BarChart3,

@@ -40,7 +40,7 @@ function LoginForm() {
       goeyToast.success("Login successful! Redirecting...");
 
       // Get redirect URL from query params or default to dashboard
-      const redirectTo = searchParams.get("redirect") || "/home";
+      const redirectTo = searchParams.get("redirect") || "/home?from=login";
 
       // Redirect after a short delay
       setTimeout(() => {

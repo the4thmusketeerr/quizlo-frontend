@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ChevronRight,
@@ -15,11 +15,43 @@ import {
   Globe2,
   Sparkles,
   ArrowLeft,
+  icons,
+  type LucideIcon,
 } from "lucide-react";
+import { getCategoryData, type Category as CategoryType } from "@/lib/quiz";
+
+// ── Dynamic Icon Component ────────────────────────────────────────────────────
+
+/**
+ * Converts a kebab-case icon name (e.g. "flask-conical")
+ * to PascalCase (e.g. "FlaskConical") to match lucide-react's icon keys.
+ */
+function toPascalCase(str: string): string {
+  return str
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join("");
+}
+
+function DynamicIcon({
+  name,
+  className,
+}: {
+  name: string;
+  className?: string;
+}) {
+  const pascalName = toPascalCase(name);
+  const IconComponent = icons[pascalName as keyof typeof icons] as
+    | LucideIcon
+    | undefined;
+  if (!IconComponent) {
+    // Fallback to Sparkles if icon name doesn't match
+    return <Sparkles className={className} />;
+  }
+  return <IconComponent className={className} />;
+}
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-
-type Category = "All" | "Science" | "Tech" | "Sports" | "History" | "Art";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
 
@@ -44,17 +76,6 @@ interface RecommendedQuiz {
   icon: React.ReactNode;
   avatars: string[];
 }
-
-// ── Filter categories ─────────────────────────────────────────────────────────
-
-const categories: { label: Category; icon: React.ReactNode }[] = [
-  { label: "All", icon: <Sparkles className="h-3.5 w-3.5" /> },
-  { label: "Science", icon: <Atom className="h-3.5 w-3.5" /> },
-  { label: "Tech", icon: <Code2 className="h-3.5 w-3.5" /> },
-  { label: "Sports", icon: <Dumbbell className="h-3.5 w-3.5" /> },
-  { label: "History", icon: <Landmark className="h-3.5 w-3.5" /> },
-  { label: "Art", icon: <Palette className="h-3.5 w-3.5" /> },
-];
 
 // ── Trending quiz data ────────────────────────────────────────────────────────
 
@@ -193,7 +214,30 @@ const categoryColors: Record<string, string> = {
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function ExploreQuizzesPage() {
-  const [activeCategory, setActiveCategory] = useState<Category>("All");
+  const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [fetchedCategories, setFetchedCategories] = useState<CategoryType[]>(
+    [],
+  );
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [categoryError, setCategoryError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        setLoadingCategories(true);
+        setCategoryError(null);
+        const data = await getCategoryData();
+        setFetchedCategories(data);
+      } catch (err) {
+        setCategoryError(
+          err instanceof Error ? err.message : "Failed to load categories.",
+        );
+      } finally {
+        setLoadingCategories(false);
+      }
+    }
+    fetchCategories();
+  }, []);
 
   const filteredTrending =
     activeCategory === "All"
@@ -203,15 +247,13 @@ export default function ExploreQuizzesPage() {
   return (
     <div className="animate-fade-in min-h-[80vh]">
       {/* ── Breadcrumb / Back ── */}
-        <Link
-          href="/home"
-          className="mb-5 inline-flex items-center gap-1.5 text-sm font-medium text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </Link>
-
-
+      <Link
+        href="/home"
+        className="mb-5 inline-flex items-center gap-1.5 text-sm font-medium text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back
+      </Link>
 
       {/* ── Page Header ── */}
       <div className="mb-8">
@@ -223,30 +265,70 @@ export default function ExploreQuizzesPage() {
         </p>
       </div>
 
-      {/* ── Category Filter Pills ── */}
-      <div className="mb-8 flex flex-wrap gap-2">
-        {categories.map(({ label, icon }) => {
-          const isActive = activeCategory === label;
-          return (
-            <button
-              key={label}
-              onClick={() => setActiveCategory(label)}
-              className={`
-                inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold
-                transition-all duration-200 select-none
-                ${
-                  isActive
-                    ? "bg-gradient-to-r from-primary to-secondary text-white shadow-md shadow-primary/25"
-                    : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground border border-border/40"
-                }
-              `}
-            >
-              {icon}
-              {label}
-            </button>
-          );
-        })}
-      </div>
+      {/* ── Categories ── */}
+      <section className="mb-10">
+        <h2 className="mb-4 text-xl font-bold text-foreground tracking-tight">
+          Categories
+        </h2>
+
+        {loadingCategories && (
+          <div className="flex gap-3 overflow-hidden">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-14 w-40 shrink-0 rounded-2xl bg-muted/50 animate-pulse"
+              />
+            ))}
+          </div>
+        )}
+
+        {categoryError && (
+          <div className="rounded-2xl border border-dashed border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-6 text-center">
+            <p className="text-sm text-red-600 dark:text-red-400 font-medium">
+              {categoryError}
+            </p>
+          </div>
+        )}
+
+        {!loadingCategories && !categoryError && (
+          <div
+            className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {fetchedCategories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.name)}
+                className={`
+                  group flex items-center gap-2 shrink-0 rounded-3xl border px-4 py-1 
+                  transition-all duration-200 select-none
+                  ${
+                    activeCategory === cat.name
+                      ? "bg-gradient-to-r from-primary to-secondary text-white border-transparent shadow-md shadow-primary/25"
+                      : "bg-card border-border/40 hover:border-border/70 hover:shadow-md text-foreground"
+                  }
+                `}
+              >
+                <div
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-200  border-none`}
+                >
+                  <DynamicIcon
+                    name={cat.icon}
+                    className={`h-4.5 w-4.5 transition-colors duration-200  border-none  ${
+                      activeCategory === cat.name
+                        ? "text-white"
+                        : "text-muted-foreground group-hover:text-foreground"
+                    }`}
+                  />
+                </div>
+                <span className="text-sm font-semibold whitespace-nowrap">
+                  {cat.name}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* ── Trending Now ── */}
       <section className="mb-10 animate-slide-up">

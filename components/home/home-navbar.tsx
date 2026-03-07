@@ -37,8 +37,8 @@ export function HomeNavbar() {
           const userData = response.data;
           setProfileData((prev) => ({
             ...prev,
-            firstName: userData.first_name || prev.firstName,
-            lastName: userData.last_name || prev.lastName,
+            firstName: userData.firstName || prev.firstName,
+            lastName: userData.lastName || prev.lastName,
             username: userData.username || prev.username,
             email: userData.email || prev.email,
             avatar: userData.profilePicture || prev.avatar,

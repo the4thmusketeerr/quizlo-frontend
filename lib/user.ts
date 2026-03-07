@@ -11,8 +11,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 // Type definitions
 export interface ProfileData {
   id: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   username: string;
   email: string;
   profilePicture?: string;
@@ -135,6 +135,37 @@ export async function uploadProfilePicture(file: File): Promise<{
     }
     throw new Error(
       "An unexpected error occurred while uploading profile picture.",
+    );
+  }
+}
+
+export async function deleteProfilePicture(): Promise<{ success: boolean; message: string }> {
+  try {
+    const token = getToken();
+
+    const response = await fetch(`${API_BASE_URL}/user/profile-picture`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        result.message || "Failed to delete profile picture. Please try again.",
+      );
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error(
+      "An unexpected error occurred while deleting profile picture.",
     );
   }
 }
