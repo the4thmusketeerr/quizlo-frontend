@@ -7,7 +7,7 @@ This application implements a complete authentication system with route protecti
 The authentication system consists of three main components:
 
 1. **Authentication API Functions** (`lib/auth.ts`)
-2. **Route Protection Proxy** (`proxy.ts`)
+2. **Route Protection Middleware** (`middleware.ts`)
 3. **Login/Register Pages** (`app/(auth)/login` and `app/(auth)/register`)
 
 ## How It Works
@@ -25,7 +25,7 @@ When a user logs in or registers:
 
 ### 2. Route Protection
 
-The `proxy.ts` file runs **before every route** in the application. It exports a function named `proxy()` that handles all route protection logic:
+The `middleware.ts` file runs **before every route** in the application. It exports a function named `middleware()` that handles all route protection logic:
 
 - **Public Routes** (accessible to everyone):
   - `/` - Homepage
@@ -101,7 +101,7 @@ The authentication system behaves slightly differently in development and produc
 
 ### Adding More Public Routes
 
-Edit `proxy.ts` and add routes to the `publicRoutes` array:
+Edit `middleware.ts` and add routes to the `publicRoutes` array:
 
 ```typescript
 const publicRoutes = ["/", "/login", "/register", "/about", "/contact"];

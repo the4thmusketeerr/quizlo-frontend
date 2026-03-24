@@ -144,6 +144,9 @@
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
+    /* Force scrolling and pointer events even when Radix tries to lock them */
+    pointer-events: auto !important;
+    overflow: auto !important;
   }
 
   /* Typography */

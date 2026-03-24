@@ -12,6 +12,8 @@ import {
 import { useSearchParams } from "next/navigation";
 import { getProfile } from "@/lib/user";
 import { useEffect, useState, Suspense } from "react";
+import { useAppStore } from "@/store/useAppStore";
+import { goeyToast } from "@/components/ui/goey-toaster";
 
 // ── Quick‑action items ───────────────────────────────────────────────────────
 
@@ -21,7 +23,7 @@ const quickActions = [
     title: "Create a Quiz",
     description: "Design your own challenges",
     icon: Plus,
-    href: "/quiz/create",
+    href: "/create",
     bgColor: "bg-emerald-50 dark:bg-emerald-950/40",
     iconBg: "bg-emerald-100 dark:bg-emerald-900/60",
     iconColor: "text-emerald-600 dark:text-emerald-400",
@@ -84,27 +86,28 @@ function HomeContent() {
   const level = 1;
   const xpPercent = Math.min((currentXP / maxXP) * 100, 100);
 
-  const [profileData, setProfileData] = useState({
-    firstName: "User",
-    username: "user",
-    email: "user@example.com",
-    avatar: "",
-  });
+  const { profile: storeProfile, setProfile: setStoreProfile } = useAppStore();
+
+  const profileData = {
+    firstName: storeProfile?.firstName || "User",
+    username: storeProfile?.username || "user",
+    email: storeProfile?.email || "user@example.com",
+    avatar: storeProfile?.profilePicture || "",
+  };
 
   useEffect(() => {
     async function fetchProfile() {
       try {
         const response = await getProfile();
-        console.log("Profile Data: ", response);
         if (response.success && response.data) {
-          const userData = response.data;
-          setProfileData((prev) => ({
-            ...prev,
-            firstName: userData.firstName || prev.firstName,
-            username: userData.username || prev.username,
-            email: userData.email || prev.email,
-            avatar: userData.profilePicture || prev.avatar,
-          }));
+          setStoreProfile(response.data);
+
+          // Daily login XP bonus toast
+          if (response.dailyLoginXP && response.dailyLoginXP > 0) {
+            goeyToast(`🎉 Daily Login Bonus! +${response.dailyLoginXP} XP`, {
+              duration: 3000,
+            });
+          }
         }
       } catch (error) {
         console.log("Error fetching profile: ", error);
@@ -112,80 +115,65 @@ function HomeContent() {
     }
 
     fetchProfile();
-  }, []);
+  }, [setStoreProfile]);
 
   return (
     <div className="flex flex-col items-center pb-12 px-4">
-      {/* ── Hero Banner ── */}
-      <div className="relative mt-4 w-full max-w-md overflow-hidden rounded-3xl bg-gradient-to-br from-cyan-200 via-sky-100 to-purple-200 dark:from-cyan-900/60 dark:via-sky-900/40 dark:to-purple-900/60 p-8 shadow-lg animate-fade-in">
-        {/* Decorative blobs */}
-        <div className="absolute -top-10 -left-10 h-32 w-32 rounded-full bg-white/20 blur-2xl" />
-        <div className="absolute -bottom-10 -right-10 h-36 w-36 rounded-full bg-purple-300/20 blur-2xl" />
+      {/* ── Redesigned Hero section ── */}
+      <div className="relative mt-6 w-full max-w-2xl overflow-hidden rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-[#E0F2FE] via-[#F0F9FF] to-[#F5F3FF] dark:from-[#0C4A6E] dark:via-[#075985] dark:to-[#4C1D95] p-6 md:p-10 shadow-xl border border-white/20 dark:border-white/5 animate-fade-in group">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-blue-400/10 blur-[80px]" />
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 h-64 w-64 rounded-full bg-purple-400/10 blur-[80px]" />
 
-        {/* Emoji row */}
-        <div className="relative flex items-end justify-center gap-4 py-6">
-          <span
-            className="text-4xl animate-float select-none"
-            role="img"
-            aria-label="lightbulb"
-          >
-            💡
-          </span>
-          <span
-            className="text-5xl animate-float animation-delay-100 select-none"
-            role="img"
-            aria-label="trophy"
-          >
-            🏆
-          </span>
-          <span
-            className="text-4xl animate-float animation-delay-200 select-none"
-            role="img"
-            aria-label="lightbulb"
-          >
-            💡
-          </span>
+        <div className="relative flex items-center justify-between gap-4 md:gap-8">
+          {/* Content side */}
+          <div className="flex-1 text-left space-y-4 md:space-y-6">
+            <div className="space-y-1.5 md:space-y-3">
+              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black tracking-tight text-[#1E40AF] dark:text-[#BFDBFE] leading-tight whitespace-nowrap">
+                {from === "login" 
+                  ? `Welcome back, ${profileData.firstName}!` 
+                  : `Welcome to Quizlo, ${profileData.firstName}!`}
+              </h1>
+              <p className="text-xs md:text-base font-semibold text-[#3B82F6] dark:text-[#60A5FA] whitespace-nowrap">
+                {from === "login" 
+                  ? "Ready for today's challenge?" 
+                  : "Learn. Compete. Level Up."
+                }
+              </p>
+            </div>
+            
+            <Link 
+              href="/explore" 
+              className="inline-flex items-center gap-1.5 rounded-xl md:rounded-2xl bg-white/60 dark:bg-white/10 backdrop-blur-md px-4 py-2 md:px-8 md:py-3.5 text-xs md:text-base font-bold text-[#1E40AF] dark:text-white border border-white/50 dark:border-white/20 hover:bg-white/80 dark:hover:bg-white/20 transition-all duration-300 shadow-sm hover:shadow-md group/btn"
+            >
+              Start a Quiz
+              <ChevronRight className="h-4 w-4 md:h-5 md:w-5 transition-transform group-hover/btn:translate-x-1" />
+            </Link>
+          </div>
+
+          {/* Image side */}
+          {/* <div className="relative shrink-0 w-24 h-24 sm:w-32 sm:h-32 md:w-52 md:h-52 animate-float">
+            
+            <div className="absolute -top-2 -right-2 md:-top-4 md:-right-4 text-lg md:text-2xl animate-pulse select-none">✨</div>
+            <div className="absolute top-1/2 -left-4 md:-left-6 text-base md:text-xl animate-bounce delay-150 select-none">⭐</div>
+            <img 
+              src="/home/owl.png" 
+              alt="Quizlo Owl" 
+              className="w-full h-full object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105"
+            />
+          </div> */}
         </div>
-      </div>
-
-      {/* ── Welcome text ── */}
-      <div className="mt-6 text-center animate-slide-up">
-        {from === "login" ? (
-          <>
-            <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-              Welcome back, {profileData.firstName}!{" "}
-              <span role="img" aria-label="waving hand">
-                👋
-              </span>
-            </h1>
-            <p className="mt-1.5 text-sm text-muted-foreground font-medium tracking-wide">
-              Ready to pick up where you left off?
-            </p>
-          </>
-        ) : (
-          <>
-            <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-              Welcome to Quizlo, {profileData.firstName}!{" "}
-              <span role="img" aria-label="party popper">
-                🎉
-              </span>
-            </h1>
-            <p className="mt-1.5 text-sm text-muted-foreground font-medium tracking-wide">
-              Learn. Compete. Level Up.
-            </p>
-          </>
-        )}
       </div>
 
       
 
       {/* ── Quick Actions ── */}
-      <div className="mt-10 w-full max-w-md animate-slide-up animation-delay-200">
-        <h2 className="mb-4 text-lg font-bold text-foreground tracking-tight">
+      <div className="mt-10 w-full max-w-2xl animate-slide-up animation-delay-200">
+        <h2 className="mb-4 text-lg font-bold text-foreground tracking-tight px-1">
           Quick Actions
         </h2>
 
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
@@ -219,34 +207,7 @@ function HomeContent() {
         </div>
       </div>
 
-      {/* ── Level / XP Card ── */}
-      <div className="mt-8 w-full max-w-md rounded-2xl border border-border/60 bg-card p-5 shadow-sm animate-slide-up animation-delay-300">
-        {/* Header row */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
-            <span className="text-sm font-bold text-foreground">
-              Level {level} Explorer
-            </span>
-          </div>
-          <span className="text-sm font-semibold text-muted-foreground">
-            {currentXP} / {maxXP} XP
-          </span>
-        </div>
-
-        {/* Progress bar */}
-        <div className="mt-3 h-2 w-full rounded-full bg-muted overflow-hidden">
-          <div
-            className="h-2 rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-700"
-            style={{ width: `${xpPercent}%` }}
-          />
-        </div>
-
-        {/* Motivational text */}
-        <p className="mt-3 text-center text-xs text-muted-foreground font-medium">
-          Complete your first quiz to earn 100 XP!
-        </p>
-      </div>
+      
     </div>
   );
 }

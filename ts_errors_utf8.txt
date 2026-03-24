@@ -1,0 +1,724 @@
+﻿script.ts(8,1): error TS1127: Invalid character.
+script.ts(10,1): error TS1135: Argument expression expected.
+script.ts(79,9): error TS1127: Invalid character.
+script.ts(79,10): error TS1127: Invalid character.
+script.ts(79,11): error TS1127: Invalid character.
+script.ts(79,13): error TS1005: ',' expected.
+script.ts(79,14): error TS1127: Invalid character.
+script.ts(79,15): error TS1127: Invalid character.
+script.ts(79,16): error TS1127: Invalid character.
+script.ts(79,18): error TS1127: Invalid character.
+script.ts(79,19): error TS1127: Invalid character.
+script.ts(79,20): error TS1127: Invalid character.
+script.ts(79,21): error TS1127: Invalid character.
+script.ts(79,22): error TS1127: Invalid character.
+script.ts(79,23): error TS1127: Invalid character.
+script.ts(79,24): error TS1128: Declaration or statement expected.
+script.ts(81,9): error TS1005: ';' expected.
+script.ts(82,10): error TS1005: ';' expected.
+script.ts(83,13): error TS1005: ';' expected.
+script.ts(84,12): error TS1005: ';' expected.
+script.ts(85,13): error TS1127: Invalid character.
+script.ts(85,14): error TS1127: Invalid character.
+script.ts(85,15): error TS1127: Invalid character.
+script.ts(85,17): error TS1005: ',' expected.
+script.ts(85,18): error TS1127: Invalid character.
+script.ts(85,19): error TS1127: Invalid character.
+script.ts(85,20): error TS1127: Invalid character.
+script.ts(85,23): error TS1127: Invalid character.
+script.ts(85,24): error TS1127: Invalid character.
+script.ts(85,25): error TS1127: Invalid character.
+script.ts(85,32): error TS1005: ',' expected.
+script.ts(85,47): error TS1005: ',' expected.
+script.ts(85,55): error TS1005: ',' expected.
+script.ts(85,56): error TS1128: Declaration or statement expected.
+script.ts(86,13): error TS1127: Invalid character.
+script.ts(86,14): error TS1127: Invalid character.
+script.ts(86,15): error TS1127: Invalid character.
+script.ts(86,18): error TS1127: Invalid character.
+script.ts(86,19): error TS1127: Invalid character.
+script.ts(86,20): error TS1127: Invalid character.
+script.ts(86,23): error TS1127: Invalid character.
+script.ts(86,24): error TS1127: Invalid character.
+script.ts(86,25): error TS1127: Invalid character.
+script.ts(86,26): error TS1128: Declaration or statement expected.
+script.ts(86,47): error TS1005: ';' expected.
+script.ts(86,56): error TS1128: Declaration or statement expected.
+script.ts(87,13): error TS1127: Invalid character.
+script.ts(87,14): error TS1127: Invalid character.
+script.ts(87,15): error TS1127: Invalid character.
+script.ts(87,18): error TS1127: Invalid character.
+script.ts(87,19): error TS1127: Invalid character.
+script.ts(87,20): error TS1127: Invalid character.
+script.ts(87,23): error TS1127: Invalid character.
+script.ts(87,24): error TS1127: Invalid character.
+script.ts(87,25): error TS1127: Invalid character.
+script.ts(87,26): error TS1128: Declaration or statement expected.
+script.ts(87,47): error TS1005: ';' expected.
+script.ts(87,56): error TS1128: Declaration or statement expected.
+script.ts(88,13): error TS1127: Invalid character.
+script.ts(88,14): error TS1127: Invalid character.
+script.ts(88,15): error TS1127: Invalid character.
+script.ts(88,18): error TS1127: Invalid character.
+script.ts(88,19): error TS1127: Invalid character.
+script.ts(88,20): error TS1127: Invalid character.
+script.ts(88,23): error TS1127: Invalid character.
+script.ts(88,24): error TS1127: Invalid character.
+script.ts(88,25): error TS1127: Invalid character.
+script.ts(88,26): error TS1128: Declaration or statement expected.
+script.ts(88,47): error TS1005: ';' expected.
+script.ts(88,56): error TS1128: Declaration or statement expected.
+script.ts(89,5): error TS1128: Declaration or statement expected.
+script.ts(89,6): error TS1128: Declaration or statement expected.
+script.ts(91,25): error TS1005: ';' expected.
+script.ts(92,3): error TS1109: Expression expected.
+script.ts(93,1): error TS1128: Declaration or statement expected.
+script.ts(93,2): error TS1127: Invalid character.
+script.ts(94,1): error TS1128: Declaration or statement expected.
+script.ts(97,19): error TS1127: Invalid character.
+script.ts(127,21): error TS1127: Invalid character.
+script.ts(127,22): error TS1127: Invalid character.
+script.ts(127,23): error TS1127: Invalid character.
+script.ts(127,25): error TS1005: ',' expected.
+script.ts(127,26): error TS1127: Invalid character.
+script.ts(127,27): error TS1127: Invalid character.
+script.ts(127,28): error TS1127: Invalid character.
+script.ts(127,31): error TS1127: Invalid character.
+script.ts(127,32): error TS1127: Invalid character.
+script.ts(127,33): error TS1127: Invalid character.
+script.ts(127,40): error TS1005: ',' expected.
+script.ts(127,59): error TS1005: ',' expected.
+script.ts(127,66): error TS1005: ',' expected.
+script.ts(128,21): error TS1127: Invalid character.
+script.ts(128,22): error TS1127: Invalid character.
+script.ts(128,23): error TS1127: Invalid character.
+script.ts(128,25): error TS1005: ',' expected.
+script.ts(128,26): error TS1127: Invalid character.
+script.ts(128,27): error TS1127: Invalid character.
+script.ts(128,28): error TS1127: Invalid character.
+script.ts(128,31): error TS1127: Invalid character.
+script.ts(128,32): error TS1127: Invalid character.
+script.ts(128,33): error TS1127: Invalid character.
+script.ts(128,34): error TS1128: Declaration or statement expected.
+script.ts(128,60): error TS1005: ';' expected.
+script.ts(128,69): error TS1128: Declaration or statement expected.
+script.ts(129,13): error TS1128: Declaration or statement expected.
+script.ts(129,14): error TS1128: Declaration or statement expected.
+script.ts(130,11): error TS1128: Declaration or statement expected.
+script.ts(131,9): error TS1128: Declaration or statement expected.
+script.ts(131,11): error TS1128: Declaration or statement expected.
+script.ts(136,21): error TS1127: Invalid character.
+script.ts(136,22): error TS1127: Invalid character.
+script.ts(136,23): error TS1127: Invalid character.
+script.ts(136,25): error TS1005: ',' expected.
+script.ts(136,26): error TS1127: Invalid character.
+script.ts(136,27): error TS1127: Invalid character.
+script.ts(136,28): error TS1127: Invalid character.
+script.ts(136,31): error TS1127: Invalid character.
+script.ts(136,32): error TS1127: Invalid character.
+script.ts(136,33): error TS1127: Invalid character.
+script.ts(136,40): error TS1005: ',' expected.
+script.ts(136,55): error TS1005: ',' expected.
+script.ts(136,70): error TS1005: ',' expected.
+script.ts(136,77): error TS1005: ',' expected.
+script.ts(137,21): error TS1127: Invalid character.
+script.ts(137,22): error TS1127: Invalid character.
+script.ts(137,23): error TS1127: Invalid character.
+script.ts(137,25): error TS1005: ',' expected.
+script.ts(137,26): error TS1127: Invalid character.
+script.ts(137,27): error TS1127: Invalid character.
+script.ts(137,28): error TS1127: Invalid character.
+script.ts(137,31): error TS1127: Invalid character.
+script.ts(137,32): error TS1127: Invalid character.
+script.ts(137,33): error TS1127: Invalid character.
+script.ts(137,34): error TS1128: Declaration or statement expected.
+script.ts(137,55): error TS1005: ';' expected.
+script.ts(137,70): error TS1005: ';' expected.
+script.ts(137,78): error TS1128: Declaration or statement expected.
+script.ts(138,13): error TS1128: Declaration or statement expected.
+script.ts(138,14): error TS1128: Declaration or statement expected.
+script.ts(139,11): error TS1128: Declaration or statement expected.
+script.ts(140,9): error TS1128: Declaration or statement expected.
+script.ts(140,11): error TS1128: Declaration or statement expected.
+script.ts(147,22): error TS1127: Invalid character.
+script.ts(147,23): error TS1127: Invalid character.
+script.ts(147,24): error TS1127: Invalid character.
+script.ts(147,26): error TS1005: ',' expected.
+script.ts(147,27): error TS1127: Invalid character.
+script.ts(147,28): error TS1127: Invalid character.
+script.ts(147,29): error TS1127: Invalid character.
+script.ts(147,32): error TS1127: Invalid character.
+script.ts(147,33): error TS1127: Invalid character.
+script.ts(147,34): error TS1127: Invalid character.
+script.ts(147,35): error TS1135: Argument expression expected.
+script.ts(147,41): error TS1005: ',' expected.
+script.ts(147,56): error TS1005: ',' expected.
+script.ts(147,64): error TS1005: ',' expected.
+script.ts(147,65): error TS1128: Declaration or statement expected.
+script.ts(148,22): error TS1127: Invalid character.
+script.ts(148,23): error TS1127: Invalid character.
+script.ts(148,24): error TS1127: Invalid character.
+script.ts(148,27): error TS1127: Invalid character.
+script.ts(148,28): error TS1127: Invalid character.
+script.ts(148,29): error TS1127: Invalid character.
+script.ts(148,32): error TS1127: Invalid character.
+script.ts(148,33): error TS1127: Invalid character.
+script.ts(148,34): error TS1127: Invalid character.
+script.ts(148,35): error TS1128: Declaration or statement expected.
+script.ts(148,56): error TS1005: ';' expected.
+script.ts(148,65): error TS1128: Declaration or statement expected.
+script.ts(149,14): error TS1128: Declaration or statement expected.
+script.ts(152,9): error TS1128: Declaration or statement expected.
+script.ts(154,7): error TS1128: Declaration or statement expected.
+script.ts(154,8): error TS1128: Declaration or statement expected.
+script.ts(155,5): error TS1128: Declaration or statement expected.
+script.ts(156,3): error TS1128: Declaration or statement expected.
+script.ts(200,23): error TS1127: Invalid character.
+script.ts(200,24): error TS1127: Invalid character.
+script.ts(200,25): error TS1127: Invalid character.
+script.ts(200,27): error TS1005: ',' expected.
+script.ts(200,28): error TS1127: Invalid character.
+script.ts(200,29): error TS1127: Invalid character.
+script.ts(200,30): error TS1127: Invalid character.
+script.ts(200,32): error TS1127: Invalid character.
+script.ts(200,33): error TS1127: Invalid character.
+script.ts(200,34): error TS1127: Invalid character.
+script.ts(200,35): error TS1127: Invalid character.
+script.ts(200,36): error TS1127: Invalid character.
+script.ts(200,37): error TS1127: Invalid character.
+script.ts(200,44): error TS1005: ',' expected.
+script.ts(200,59): error TS1005: ',' expected.
+script.ts(200,77): error TS1005: ',' expected.
+script.ts(200,82): error TS1005: ',' expected.
+script.ts(200,83): error TS1005: ':' expected.
+script.ts(201,15): error TS1135: Argument expression expected.
+script.ts(201,16): error TS1128: Declaration or statement expected.
+script.ts(202,13): error TS1128: Declaration or statement expected.
+script.ts(203,11): error TS1128: Declaration or statement expected.
+script.ts(204,7): error TS1128: Declaration or statement expected.
+script.ts(205,5): error TS1128: Declaration or statement expected.
+script.ts(206,3): error TS1128: Declaration or statement expected.
+script.ts(292,5): error TS1127: Invalid character.
+script.ts(296,51): error TS1127: Invalid character.
+script.ts(296,52): error TS1127: Invalid character.
+script.ts(296,53): error TS1134: Variable declaration expected.
+script.ts(296,64): error TS1005: ';' expected.
+script.ts(296,69): error TS1127: Invalid character.
+script.ts(296,70): error TS1127: Invalid character.
+script.ts(296,71): error TS1109: Expression expected.
+script.ts(296,72): error TS1127: Invalid character.
+script.ts(296,73): error TS1127: Invalid character.
+script.ts(296,122): error TS1127: Invalid character.
+script.ts(296,123): error TS1127: Invalid character.
+script.ts(296,126): error TS1127: Invalid character.
+script.ts(296,127): error TS1127: Invalid character.
+script.ts(296,145): error TS1127: Invalid character.
+script.ts(296,146): error TS1127: Invalid character.
+script.ts(296,147): error TS1128: Declaration or statement expected.
+script.ts(296,148): error TS1127: Invalid character.
+script.ts(296,149): error TS1127: Invalid character.
+script.ts(296,150): error TS1128: Declaration or statement expected.
+script.ts(296,151): error TS1127: Invalid character.
+script.ts(296,152): error TS1127: Invalid character.
+script.ts(296,153): error TS1128: Declaration or statement expected.
+script.ts(296,154): error TS1127: Invalid character.
+script.ts(296,155): error TS1127: Invalid character.
+script.ts(296,158): error TS1127: Invalid character.
+script.ts(296,159): error TS1127: Invalid character.
+script.ts(296,176): error TS1127: Invalid character.
+script.ts(296,177): error TS1127: Invalid character.
+script.ts(296,217): error TS1127: Invalid character.
+script.ts(296,218): error TS1127: Invalid character.
+script.ts(296,219): error TS1109: Expression expected.
+script.ts(296,225): error TS1005: ';' expected.
+script.ts(296,241): error TS1127: Invalid character.
+script.ts(296,242): error TS1127: Invalid character.
+script.ts(296,243): error TS1109: Expression expected.
+script.ts(296,244): error TS1127: Invalid character.
+script.ts(296,245): error TS1127: Invalid character.
+script.ts(297,19): error TS1127: Invalid character.
+script.ts(298,26): error TS1005: '>' expected.
+script.ts(298,35): error TS1005: ';' expected.
+script.ts(300,25): error TS1005: '>' expected.
+script.ts(300,36): error TS1005: ';' expected.
+script.ts(301,40): error TS1005: ',' expected.
+script.ts(302,35): error TS1136: Property assignment expected.
+script.ts(302,39): error TS1005: ';' expected.
+script.ts(304,25): error TS1128: Declaration or statement expected.
+script.ts(306,24): error TS1109: Expression expected.
+script.ts(308,28): error TS1005: '>' expected.
+script.ts(308,37): error TS1005: ';' expected.
+script.ts(309,33): error TS1005: '>' expected.
+script.ts(309,38): error TS1005: ';' expected.
+script.ts(309,70): error TS1136: Property assignment expected.
+script.ts(309,74): error TS1005: ',' expected.
+script.ts(309,90): error TS1005: ';' expected.
+script.ts(309,124): error TS1128: Declaration or statement expected.
+script.ts(309,125): error TS1109: Expression expected.
+script.ts(310,42): error TS1005: '>' expected.
+script.ts(310,51): error TS1005: ';' expected.
+script.ts(311,42): error TS1005: '>' expected.
+script.ts(311,53): error TS1005: ';' expected.
+script.ts(311,71): error TS1109: Expression expected.
+script.ts(312,28): error TS1110: Type expected.
+script.ts(315,43): error TS1005: '>' expected.
+script.ts(315,46): error TS1005: ')' expected.
+script.ts(315,49): error TS1005: ',' expected.
+script.ts(315,57): error TS1005: ',' expected.
+script.ts(315,65): error TS1005: ',' expected.
+script.ts(315,75): error TS1005: ',' expected.
+script.ts(315,83): error TS1161: Unterminated regular expression literal.
+script.ts(316,30): error TS1005: ';' expected.
+script.ts(317,28): error TS1110: Type expected.
+script.ts(318,26): error TS1161: Unterminated regular expression literal.
+script.ts(322,34): error TS1005: '>' expected.
+script.ts(322,43): error TS1005: ')' expected.
+script.ts(323,37): error TS1005: '>' expected.
+script.ts(323,46): error TS1005: ';' expected.
+script.ts(323,62): error TS1109: Expression expected.
+script.ts(324,33): error TS1005: ';' expected.
+script.ts(325,36): error TS1005: ';' expected.
+script.ts(325,48): error TS1005: ';' expected.
+script.ts(325,81): error TS1005: ';' expected.
+script.ts(325,100): error TS1005: ';' expected.
+script.ts(325,110): error TS1136: Property assignment expected.
+script.ts(325,112): error TS1005: ',' expected.
+script.ts(325,119): error TS1005: ';' expected.
+script.ts(325,152): error TS1161: Unterminated regular expression literal.
+script.ts(326,28): error TS1161: Unterminated regular expression literal.
+script.ts(327,25): error TS1128: Declaration or statement expected.
+script.ts(327,26): error TS1128: Declaration or statement expected.
+script.ts(328,24): error TS1110: Type expected.
+script.ts(329,22): error TS1161: Unterminated regular expression literal.
+script.ts(333,28): error TS1005: '>' expected.
+script.ts(333,37): error TS1005: ')' expected.
+script.ts(334,34): error TS1005: ',' expected.
+script.ts(335,34): error TS1005: '>' expected.
+script.ts(335,37): error TS1005: ')' expected.
+script.ts(335,47): error TS1005: ',' expected.
+script.ts(335,58): error TS1005: ':' expected.
+script.ts(335,67): error TS1005: ',' expected.
+script.ts(335,100): error TS1109: Expression expected.
+script.ts(336,25): error TS1109: Expression expected.
+script.ts(336,27): error TS1136: Property assignment expected.
+script.ts(336,37): error TS1005: ',' expected.
+script.ts(337,34): error TS1005: '>' expected.
+script.ts(337,37): error TS1005: ')' expected.
+script.ts(337,47): error TS1005: ',' expected.
+script.ts(337,58): error TS1005: ':' expected.
+script.ts(337,67): error TS1005: ',' expected.
+script.ts(337,84): error TS1109: Expression expected.
+script.ts(338,25): error TS1109: Expression expected.
+script.ts(338,27): error TS1136: Property assignment expected.
+script.ts(338,29): error TS1136: Property assignment expected.
+script.ts(339,32): error TS1005: '>' expected.
+script.ts(339,35): error TS1005: ',' expected.
+script.ts(339,45): error TS1005: ',' expected.
+script.ts(339,56): error TS1005: ',' expected.
+script.ts(339,77): error TS1005: ',' expected.
+script.ts(339,125): error TS1109: Expression expected.
+script.ts(340,25): error TS1109: Expression expected.
+script.ts(341,33): error TS1005: '>' expected.
+script.ts(341,37): error TS1005: ';' expected.
+script.ts(341,47): error TS1005: ';' expected.
+script.ts(341,56): error TS1136: Property assignment expected.
+script.ts(341,59): error TS1005: ';' expected.
+script.ts(341,81): error TS1128: Declaration or statement expected.
+script.ts(341,196): error TS1005: ';' expected.
+script.ts(342,30): error TS1005: '>' expected.
+script.ts(342,39): error TS1005: ';' expected.
+script.ts(342,55): error TS1109: Expression expected.
+script.ts(343,26): error TS1110: Type expected.
+script.ts(344,24): error TS1161: Unterminated regular expression literal.
+script.ts(345,21): error TS1128: Declaration or statement expected.
+script.ts(345,22): error TS1128: Declaration or statement expected.
+script.ts(348,26): error TS1005: '>' expected.
+script.ts(348,35): error TS1005: ';' expected.
+script.ts(351,30): error TS1005: '>' expected.
+script.ts(351,39): error TS1005: ')' expected.
+script.ts(352,36): error TS1005: ',' expected.
+script.ts(355,36): error TS1005: '>' expected.
+script.ts(355,39): error TS1005: ')' expected.
+script.ts(355,47): error TS1005: ',' expected.
+script.ts(355,52): error TS1005: ';' expected.
+script.ts(357,35): error TS1005: '>' expected.
+script.ts(357,39): error TS1005: ';' expected.
+script.ts(358,44): error TS1136: Property assignment expected.
+script.ts(358,47): error TS1005: ';' expected.
+script.ts(359,35): error TS1005: ',' expected.
+script.ts(359,46): error TS1127: Invalid character.
+script.ts(359,52): error TS1005: ',' expected.
+script.ts(359,53): error TS1005: ',' expected.
+script.ts(359,59): error TS1005: ',' expected.
+script.ts(359,72): error TS1005: ',' expected.
+script.ts(359,78): error TS1005: ',' expected.
+script.ts(359,89): error TS1005: ',' expected.
+script.ts(359,98): error TS1005: ',' expected.
+script.ts(359,103): error TS1005: ',' expected.
+script.ts(359,110): error TS1005: ',' expected.
+script.ts(359,120): error TS1005: ',' expected.
+script.ts(359,135): error TS1005: ',' expected.
+script.ts(359,148): error TS1127: Invalid character.
+script.ts(359,149): error TS1127: Invalid character.
+script.ts(359,150): error TS1135: Argument expression expected.
+script.ts(362,37): error TS1005: '>' expected.
+script.ts(362,41): error TS1005: ';' expected.
+script.ts(363,50): error TS1127: Invalid character.
+script.ts(363,58): error TS1127: Invalid character.
+script.ts(363,59): error TS1127: Invalid character.
+script.ts(364,50): error TS1005: ',' expected.
+script.ts(365,46): error TS1136: Property assignment expected.
+script.ts(365,50): error TS1005: ';' expected.
+script.ts(366,47): error TS1136: Property assignment expected.
+script.ts(366,51): error TS1005: ';' expected.
+script.ts(366,102): error TS1128: Declaration or statement expected.
+script.ts(368,36): error TS1109: Expression expected.
+script.ts(370,37): error TS1005: '>' expected.
+script.ts(370,46): error TS1005: ';' expected.
+script.ts(370,48): error TS1127: Invalid character.
+script.ts(370,50): error TS1434: Unexpected keyword or identifier.
+script.ts(370,58): error TS1005: ';' expected.
+script.ts(370,62): error TS1005: ';' expected.
+script.ts(370,71): error TS1005: ';' expected.
+script.ts(370,84): error TS1005: ';' expected.
+script.ts(370,99): error TS1005: ';' expected.
+script.ts(370,112): error TS1005: ';' expected.
+script.ts(370,127): error TS1127: Invalid character.
+script.ts(370,128): error TS1127: Invalid character.
+script.ts(371,35): error TS1109: Expression expected.
+script.ts(372,48): error TS1005: ',' expected.
+script.ts(372,65): error TS1005: '>' expected.
+script.ts(372,74): error TS1005: ';' expected.
+script.ts(372,111): error TS1109: Expression expected.
+script.ts(372,112): error TS1109: Expression expected.
+script.ts(373,36): error TS1110: Type expected.
+script.ts(374,34): error TS1161: Unterminated regular expression literal.
+script.ts(376,43): error TS1005: '>' expected.
+script.ts(376,47): error TS1005: ')' expected.
+script.ts(376,57): error TS1005: ';' expected.
+script.ts(376,66): error TS1136: Property assignment expected.
+script.ts(376,69): error TS1005: ';' expected.
+script.ts(377,40): error TS1005: '>' expected.
+script.ts(377,49): error TS1005: ';' expected.
+script.ts(377,61): error TS1109: Expression expected.
+script.ts(378,36): error TS1110: Type expected.
+script.ts(379,33): error TS1128: Declaration or statement expected.
+script.ts(379,34): error TS1128: Declaration or statement expected.
+script.ts(380,32): error TS1110: Type expected.
+script.ts(381,29): error TS1128: Declaration or statement expected.
+script.ts(382,27): error TS1128: Declaration or statement expected.
+script.ts(382,28): error TS1128: Declaration or statement expected.
+script.ts(382,29): error TS1128: Declaration or statement expected.
+script.ts(383,35): error TS1005: '>' expected.
+script.ts(383,39): error TS1005: ';' expected.
+script.ts(383,49): error TS1005: ';' expected.
+script.ts(383,58): error TS1136: Property assignment expected.
+script.ts(383,61): error TS1005: ';' expected.
+script.ts(383,81): error TS1128: Declaration or statement expected.
+script.ts(384,35): error TS1005: ';' expected.
+script.ts(385,28): error TS1161: Unterminated regular expression literal.
+script.ts(386,26): error TS1161: Unterminated regular expression literal.
+script.ts(387,23): error TS1128: Declaration or statement expected.
+script.ts(387,24): error TS1128: Declaration or statement expected.
+script.ts(391,30): error TS1005: '>' expected.
+script.ts(391,39): error TS1005: ')' expected.
+script.ts(392,36): error TS1005: ',' expected.
+script.ts(396,33): error TS1005: '>' expected.
+script.ts(396,36): error TS1005: ')' expected.
+script.ts(396,44): error TS1005: ',' expected.
+script.ts(398,42): error TS1136: Property assignment expected.
+script.ts(398,45): error TS1005: ';' expected.
+script.ts(399,33): error TS1005: ',' expected.
+script.ts(399,44): error TS1127: Invalid character.
+script.ts(399,50): error TS1005: ',' expected.
+script.ts(399,55): error TS1005: ',' expected.
+script.ts(399,63): error TS1005: ',' expected.
+script.ts(399,69): error TS1005: ',' expected.
+script.ts(399,80): error TS1005: ',' expected.
+script.ts(399,89): error TS1005: ',' expected.
+script.ts(399,94): error TS1005: ',' expected.
+script.ts(399,101): error TS1005: ',' expected.
+script.ts(399,111): error TS1005: ',' expected.
+script.ts(399,126): error TS1005: ',' expected.
+script.ts(399,139): error TS1127: Invalid character.
+script.ts(399,140): error TS1127: Invalid character.
+script.ts(399,141): error TS1135: Argument expression expected.
+script.ts(401,39): error TS1005: '>' expected.
+script.ts(401,48): error TS1005: ';' expected.
+script.ts(401,87): error TS1005: ',' expected.
+script.ts(401,94): error TS1161: Unterminated regular expression literal.
+script.ts(402,38): error TS1005: ';' expected.
+script.ts(402,49): error TS1127: Invalid character.
+script.ts(402,55): error TS1005: ',' expected.
+script.ts(402,56): error TS1005: ',' expected.
+script.ts(402,59): error TS1005: ';' expected.
+script.ts(402,63): error TS1005: ';' expected.
+script.ts(402,72): error TS1005: ';' expected.
+script.ts(402,85): error TS1005: ';' expected.
+script.ts(402,100): error TS1005: ';' expected.
+script.ts(402,113): error TS1005: ';' expected.
+script.ts(402,128): error TS1127: Invalid character.
+script.ts(402,129): error TS1127: Invalid character.
+script.ts(402,131): error TS1109: Expression expected.
+script.ts(403,46): error TS1005: ',' expected.
+script.ts(403,63): error TS1005: '>' expected.
+script.ts(403,72): error TS1005: ';' expected.
+script.ts(403,109): error TS1109: Expression expected.
+script.ts(403,110): error TS1109: Expression expected.
+script.ts(404,34): error TS1110: Type expected.
+script.ts(405,32): error TS1161: Unterminated regular expression literal.
+script.ts(406,29): error TS1128: Declaration or statement expected.
+script.ts(407,27): error TS1128: Declaration or statement expected.
+script.ts(407,28): error TS1128: Declaration or statement expected.
+script.ts(407,29): error TS1128: Declaration or statement expected.
+script.ts(408,26): error TS1110: Type expected.
+script.ts(409,23): error TS1128: Declaration or statement expected.
+script.ts(409,24): error TS1128: Declaration or statement expected.
+script.ts(413,30): error TS1005: '>' expected.
+script.ts(413,39): error TS1005: ')' expected.
+script.ts(414,36): error TS1005: ',' expected.
+script.ts(417,36): error TS1005: '>' expected.
+script.ts(417,39): error TS1005: ')' expected.
+script.ts(417,47): error TS1005: ',' expected.
+script.ts(417,52): error TS1005: ';' expected.
+script.ts(419,35): error TS1005: '>' expected.
+script.ts(419,39): error TS1005: ';' expected.
+script.ts(420,44): error TS1136: Property assignment expected.
+script.ts(420,47): error TS1005: ';' expected.
+script.ts(421,35): error TS1005: ',' expected.
+script.ts(421,46): error TS1127: Invalid character.
+script.ts(421,52): error TS1005: ',' expected.
+script.ts(421,53): error TS1005: ',' expected.
+script.ts(421,59): error TS1005: ',' expected.
+script.ts(421,72): error TS1005: ',' expected.
+script.ts(421,78): error TS1005: ',' expected.
+script.ts(421,89): error TS1005: ',' expected.
+script.ts(421,98): error TS1005: ',' expected.
+script.ts(421,103): error TS1005: ',' expected.
+script.ts(421,110): error TS1005: ',' expected.
+script.ts(421,120): error TS1005: ',' expected.
+script.ts(421,135): error TS1005: ',' expected.
+script.ts(421,148): error TS1127: Invalid character.
+script.ts(421,149): error TS1127: Invalid character.
+script.ts(421,150): error TS1135: Argument expression expected.
+script.ts(424,37): error TS1005: '>' expected.
+script.ts(424,41): error TS1005: ';' expected.
+script.ts(425,50): error TS1127: Invalid character.
+script.ts(425,58): error TS1127: Invalid character.
+script.ts(425,59): error TS1127: Invalid character.
+script.ts(426,50): error TS1005: ',' expected.
+script.ts(427,46): error TS1136: Property assignment expected.
+script.ts(427,50): error TS1005: ';' expected.
+script.ts(428,47): error TS1136: Property assignment expected.
+script.ts(428,51): error TS1005: ';' expected.
+script.ts(428,102): error TS1128: Declaration or statement expected.
+script.ts(430,36): error TS1109: Expression expected.
+script.ts(432,37): error TS1005: '>' expected.
+script.ts(432,46): error TS1005: ';' expected.
+script.ts(432,48): error TS1127: Invalid character.
+script.ts(432,50): error TS1434: Unexpected keyword or identifier.
+script.ts(432,58): error TS1005: ';' expected.
+script.ts(432,62): error TS1005: ';' expected.
+script.ts(432,71): error TS1005: ';' expected.
+script.ts(432,84): error TS1005: ';' expected.
+script.ts(432,99): error TS1005: ';' expected.
+script.ts(432,110): error TS1005: ';' expected.
+script.ts(432,125): error TS1127: Invalid character.
+script.ts(432,126): error TS1127: Invalid character.
+script.ts(433,35): error TS1109: Expression expected.
+script.ts(434,48): error TS1005: ',' expected.
+script.ts(434,65): error TS1005: '>' expected.
+script.ts(434,74): error TS1005: ';' expected.
+script.ts(434,97): error TS1109: Expression expected.
+script.ts(434,98): error TS1109: Expression expected.
+script.ts(435,36): error TS1110: Type expected.
+script.ts(436,34): error TS1161: Unterminated regular expression literal.
+script.ts(438,43): error TS1005: '>' expected.
+script.ts(438,47): error TS1005: ')' expected.
+script.ts(438,57): error TS1005: ';' expected.
+script.ts(438,66): error TS1136: Property assignment expected.
+script.ts(438,69): error TS1005: ';' expected.
+script.ts(439,40): error TS1005: '>' expected.
+script.ts(439,49): error TS1005: ';' expected.
+script.ts(439,61): error TS1109: Expression expected.
+script.ts(440,36): error TS1110: Type expected.
+script.ts(441,33): error TS1128: Declaration or statement expected.
+script.ts(441,34): error TS1128: Declaration or statement expected.
+script.ts(442,32): error TS1110: Type expected.
+script.ts(443,29): error TS1128: Declaration or statement expected.
+script.ts(444,27): error TS1128: Declaration or statement expected.
+script.ts(444,28): error TS1128: Declaration or statement expected.
+script.ts(444,29): error TS1128: Declaration or statement expected.
+script.ts(445,35): error TS1005: '>' expected.
+script.ts(445,39): error TS1005: ';' expected.
+script.ts(445,49): error TS1005: ';' expected.
+script.ts(445,58): error TS1136: Property assignment expected.
+script.ts(445,61): error TS1005: ';' expected.
+script.ts(445,81): error TS1128: Declaration or statement expected.
+script.ts(446,35): error TS1005: ';' expected.
+script.ts(447,28): error TS1161: Unterminated regular expression literal.
+script.ts(448,26): error TS1161: Unterminated regular expression literal.
+script.ts(449,23): error TS1128: Declaration or statement expected.
+script.ts(449,24): error TS1128: Declaration or statement expected.
+script.ts(453,30): error TS1005: '>' expected.
+script.ts(453,39): error TS1005: ')' expected.
+script.ts(454,34): error TS1005: '>' expected.
+script.ts(454,43): error TS1005: ';' expected.
+script.ts(454,92): error TS1005: ';' expected.
+script.ts(454,119): error TS1161: Unterminated regular expression literal.
+script.ts(455,30): error TS1005: ';' expected.
+script.ts(455,85): error TS1005: ';' expected.
+script.ts(455,89): error TS1434: Unexpected keyword or identifier.
+script.ts(455,95): error TS1434: Unexpected keyword or identifier.
+script.ts(455,100): error TS1434: Unexpected keyword or identifier.
+script.ts(455,103): error TS1434: Unexpected keyword or identifier.
+script.ts(455,112): error TS1434: Unexpected keyword or identifier.
+script.ts(455,121): error TS1434: Unexpected keyword or identifier.
+script.ts(455,126): error TS1434: Unexpected keyword or identifier.
+script.ts(455,135): error TS1003: Identifier expected.
+script.ts(455,136): error TS1161: Unterminated regular expression literal.
+script.ts(458,31): error TS1005: '>' expected.
+script.ts(458,36): error TS1005: ')' expected.
+script.ts(458,46): error TS1005: ',' expected.
+script.ts(459,31): error TS1005: ':' expected.
+script.ts(459,41): error TS1136: Property assignment expected.
+script.ts(459,45): error TS1005: ';' expected.
+script.ts(462,30): error TS1109: Expression expected.
+script.ts(463,27): error TS1109: Expression expected.
+script.ts(463,29): error TS1128: Declaration or statement expected.
+script.ts(465,31): error TS1005: '>' expected.
+script.ts(465,36): error TS1005: ')' expected.
+script.ts(465,46): error TS1005: ',' expected.
+script.ts(466,41): error TS1136: Property assignment expected.
+script.ts(466,45): error TS1005: ';' expected.
+script.ts(467,52): error TS1005: ',' expected.
+script.ts(469,30): error TS1109: Expression expected.
+script.ts(470,27): error TS1109: Expression expected.
+script.ts(470,28): error TS1128: Declaration or statement expected.
+script.ts(471,26): error TS1110: Type expected.
+script.ts(472,23): error TS1128: Declaration or statement expected.
+script.ts(472,24): error TS1128: Declaration or statement expected.
+script.ts(476,30): error TS1005: '>' expected.
+script.ts(476,39): error TS1005: ')' expected.
+script.ts(477,34): error TS1005: '>' expected.
+script.ts(477,43): error TS1005: ';' expected.
+script.ts(477,92): error TS1005: ';' expected.
+script.ts(477,107): error TS1161: Unterminated regular expression literal.
+script.ts(480,44): error TS1005: ',' expected.
+script.ts(481,39): error TS1136: Property assignment expected.
+script.ts(481,43): error TS1005: ';' expected.
+script.ts(484,28): error TS1109: Expression expected.
+script.ts(485,26): error TS1110: Type expected.
+script.ts(486,23): error TS1128: Declaration or statement expected.
+script.ts(486,24): error TS1128: Declaration or statement expected.
+script.ts(490,30): error TS1005: '>' expected.
+script.ts(490,39): error TS1005: ')' expected.
+script.ts(491,36): error TS1005: ',' expected.
+script.ts(492,34): error TS1005: '>' expected.
+script.ts(492,37): error TS1005: ')' expected.
+script.ts(492,45): error TS1005: ',' expected.
+script.ts(492,50): error TS1005: ',' expected.
+script.ts(494,33): error TS1005: '>' expected.
+script.ts(494,38): error TS1005: ',' expected.
+script.ts(494,46): error TS1005: ',' expected.
+script.ts(495,33): error TS1005: ',' expected.
+script.ts(495,43): error TS1136: Property assignment expected.
+script.ts(495,47): error TS1005: ',' expected.
+script.ts(495,98): error TS1005: ',' expected.
+script.ts(496,46): error TS1127: Invalid character.
+script.ts(496,52): error TS1127: Invalid character.
+script.ts(496,53): error TS1127: Invalid character.
+script.ts(498,32): error TS1109: Expression expected.
+script.ts(499,43): error TS1005: '>' expected.
+script.ts(499,52): error TS1005: ';' expected.
+script.ts(499,95): error TS1109: Expression expected.
+script.ts(501,33): error TS1005: '>' expected.
+script.ts(501,38): error TS1005: ';' expected.
+script.ts(502,43): error TS1136: Property assignment expected.
+script.ts(502,47): error TS1005: ';' expected.
+script.ts(503,46): error TS1127: Invalid character.
+script.ts(503,53): error TS1005: ',' expected.
+script.ts(503,57): error TS1005: ':' expected.
+script.ts(503,62): error TS1127: Invalid character.
+script.ts(503,63): error TS1127: Invalid character.
+script.ts(505,32): error TS1109: Expression expected.
+script.ts(506,39): error TS1005: '>' expected.
+script.ts(506,43): error TS1005: ';' expected.
+script.ts(506,53): error TS1005: ';' expected.
+script.ts(506,62): error TS1136: Property assignment expected.
+script.ts(506,65): error TS1005: ';' expected.
+script.ts(506,96): error TS1128: Declaration or statement expected.
+script.ts(506,177): error TS1005: ';' expected.
+script.ts(506,195): error TS1005: ',' expected.
+script.ts(507,41): error TS1005: '>' expected.
+script.ts(507,50): error TS1005: ';' expected.
+script.ts(507,62): error TS1109: Expression expected.
+script.ts(508,32): error TS1110: Type expected.
+script.ts(509,30): error TS1161: Unterminated regular expression literal.
+script.ts(510,27): error TS1128: Declaration or statement expected.
+script.ts(510,28): error TS1128: Declaration or statement expected.
+script.ts(510,29): error TS1128: Declaration or statement expected.
+script.ts(511,35): error TS1005: '>' expected.
+script.ts(511,39): error TS1005: ';' expected.
+script.ts(511,49): error TS1005: ';' expected.
+script.ts(511,58): error TS1136: Property assignment expected.
+script.ts(511,61): error TS1005: ';' expected.
+script.ts(511,81): error TS1128: Declaration or statement expected.
+script.ts(512,35): error TS1005: ';' expected.
+script.ts(513,28): error TS1161: Unterminated regular expression literal.
+script.ts(514,26): error TS1161: Unterminated regular expression literal.
+script.ts(515,23): error TS1128: Declaration or statement expected.
+script.ts(515,24): error TS1128: Declaration or statement expected.
+script.ts(519,30): error TS1005: '>' expected.
+script.ts(519,39): error TS1005: ')' expected.
+script.ts(520,30): error TS1005: '>' expected.
+script.ts(520,39): error TS1005: ';' expected.
+script.ts(520,81): error TS1005: ';' expected.
+script.ts(520,94): error TS1005: ';' expected.
+script.ts(520,102): error TS1434: Unexpected keyword or identifier.
+script.ts(520,108): error TS1434: Unexpected keyword or identifier.
+script.ts(520,112): error TS1434: Unexpected keyword or identifier.
+script.ts(520,122): error TS1161: Unterminated regular expression literal.
+script.ts(522,34): error TS1005: '>' expected.
+script.ts(522,37): error TS1005: ')' expected.
+script.ts(522,45): error TS1005: ',' expected.
+script.ts(522,50): error TS1005: ',' expected.
+script.ts(523,37): error TS1005: '>' expected.
+script.ts(523,46): error TS1005: ',' expected.
+script.ts(524,41): error TS1005: ',' expected.
+script.ts(524,44): error TS1005: ',' expected.
+script.ts(525,32): error TS1110: Type expected.
+script.ts(527,46): error TS1005: ',' expected.
+script.ts(528,43): error TS1136: Property assignment expected.
+script.ts(528,47): error TS1005: ';' expected.
+script.ts(529,46): error TS1127: Invalid character.
+script.ts(529,52): error TS1127: Invalid character.
+script.ts(529,53): error TS1127: Invalid character.
+script.ts(531,32): error TS1109: Expression expected.
+script.ts(532,39): error TS1005: '>' expected.
+script.ts(532,43): error TS1005: ';' expected.
+script.ts(532,53): error TS1005: ';' expected.
+script.ts(532,62): error TS1136: Property assignment expected.
+script.ts(532,65): error TS1005: ';' expected.
+script.ts(532,96): error TS1128: Declaration or statement expected.
+script.ts(532,177): error TS1005: ';' expected.
+script.ts(532,195): error TS1005: ',' expected.
+script.ts(533,41): error TS1005: '>' expected.
+script.ts(533,50): error TS1005: ';' expected.
+script.ts(533,62): error TS1109: Expression expected.
+script.ts(534,32): error TS1110: Type expected.
+script.ts(535,30): error TS1161: Unterminated regular expression literal.
+script.ts(536,27): error TS1128: Declaration or statement expected.
+script.ts(536,28): error TS1128: Declaration or statement expected.
+script.ts(536,29): error TS1128: Declaration or statement expected.
+script.ts(537,35): error TS1005: '>' expected.
+script.ts(537,39): error TS1005: ';' expected.
+script.ts(537,49): error TS1005: ';' expected.
+script.ts(537,58): error TS1136: Property assignment expected.
+script.ts(537,61): error TS1005: ';' expected.
+script.ts(537,81): error TS1128: Declaration or statement expected.
+script.ts(538,35): error TS1005: ';' expected.
+script.ts(539,28): error TS1161: Unterminated regular expression literal.
+script.ts(540,26): error TS1161: Unterminated regular expression literal.
+script.ts(541,23): error TS1128: Declaration or statement expected.
+script.ts(541,24): error TS1128: Declaration or statement expected.

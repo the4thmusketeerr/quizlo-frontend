@@ -9,6 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dicebear/collection": "^9.4.0",
+    "@dicebear/core": "^9.4.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/react": "^0.3.2",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "1.2.2",
     "@radix-ui/react-alert-dialog": "1.1.4",
@@ -37,6 +43,7 @@
     "@radix-ui/react-toggle": "1.1.1",
     "@radix-ui/react-toggle-group": "1.1.1",
     "@radix-ui/react-tooltip": "1.1.6",
+    "@types/react-star-ratings": "^2.3.3",
     "autoprefixer": "^10.4.20",
     "check-password-strength": "^3.0.0",
     "class-variance-authority": "^0.7.1",
@@ -54,13 +61,17 @@
     "react-dom": "19.2.3",
     "react-hook-form": "^7.54.1",
     "react-resizable-panels": "^2.1.7",
+    "react-star-ratings": "^2.3.0",
     "react-toastify": "^11.0.5",
     "recharts": "2.15.0",
+    "shadcn": "^4.0.5",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
-    "zod": "^3.24.1"
+    "web-haptics": "^0.0.6",
+    "zod": "^3.24.1",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.13",

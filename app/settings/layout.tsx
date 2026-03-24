@@ -1,6 +1,6 @@
 import { AppNavbar } from "@/components/shared/navbar";
 
-export default function HomeLayout({
+export default function SettingsLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -8,9 +8,7 @@ export default function HomeLayout({
   return (
     <div className="min-h-screen bg-background">
       <AppNavbar />
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        {children}
-      </main>
+      {children}
     </div>
   );
 }

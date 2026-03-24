@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   description:
     "Create, study, and compete with AI-generated quizzes. Learn smarter, not harder.",
   generator: "v0.app",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export const viewport: Viewport = {

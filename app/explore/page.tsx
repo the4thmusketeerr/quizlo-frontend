@@ -15,10 +15,27 @@ import {
   Globe2,
   Sparkles,
   ArrowLeft,
+  Clock,
+  HelpCircle,
+  User,
   icons,
   type LucideIcon,
 } from "lucide-react";
-import { getCategoryData, type Category as CategoryType } from "@/lib/quiz";
+import {
+  getCategoryData,
+  getAllQuizzes,
+  type Category as CategoryType,
+  type Quiz,
+} from "@/lib/quiz";
+import { useAppStore } from "@/store/useAppStore";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 
 // ── Dynamic Icon Component ────────────────────────────────────────────────────
 
@@ -77,119 +94,7 @@ interface RecommendedQuiz {
   avatars: string[];
 }
 
-// ── Trending quiz data ────────────────────────────────────────────────────────
 
-const trendingQuizzes: TrendingQuiz[] = [
-  {
-    id: "1",
-    title: "Space Frontiers",
-    categories: ["Science"],
-    difficulty: "Medium",
-    plays: "1.2k",
-    xp: 50,
-    icon: <Globe2 className="h-6 w-6 text-white" />,
-    iconBg: "bg-gradient-to-br from-violet-500 to-purple-600",
-  },
-  {
-    id: "2",
-    title: "Modern Web Stack",
-    categories: ["Tech"],
-    difficulty: "Hard",
-    plays: "850",
-    xp: 80,
-    icon: <Code2 className="h-6 w-6 text-white" />,
-    iconBg: "bg-gradient-to-br from-blue-500 to-cyan-500",
-  },
-  {
-    id: "3",
-    title: "Ancient Civilizations",
-    categories: ["History"],
-    difficulty: "Easy",
-    plays: "3.4k",
-    xp: 30,
-    icon: <Landmark className="h-6 w-6 text-white" />,
-    iconBg: "bg-gradient-to-br from-orange-400 to-red-500",
-  },
-  {
-    id: "4",
-    title: "Human Anatomy",
-    categories: ["Science"],
-    difficulty: "Hard",
-    plays: "620",
-    xp: 90,
-    icon: <Brain className="h-6 w-6 text-white" />,
-    iconBg: "bg-gradient-to-br from-pink-500 to-rose-500",
-  },
-  {
-    id: "5",
-    title: "Olympic Records",
-    categories: ["Sports"],
-    difficulty: "Medium",
-    plays: "1.5k",
-    xp: 45,
-    icon: <Dumbbell className="h-6 w-6 text-white" />,
-    iconBg: "bg-gradient-to-br from-green-500 to-emerald-500",
-  },
-  {
-    id: "6",
-    title: "Renaissance Masters",
-    categories: ["Art", "History"],
-    difficulty: "Medium",
-    plays: "970",
-    xp: 55,
-    icon: <Palette className="h-6 w-6 text-white" />,
-    iconBg: "bg-gradient-to-br from-amber-400 to-orange-500",
-  },
-];
-
-// ── Recommended quiz data ─────────────────────────────────────────────────────
-
-const recommendedQuizzes: RecommendedQuiz[] = [
-  {
-    id: "r1",
-    title: "Master of Psychology",
-    description:
-      "Test your knowledge of the human mind, behavior, and social interactions.",
-    badge: "Most Popular",
-    badgeBg: "bg-white/20 text-white",
-    gradient: "from-violet-500 via-purple-500 to-fuchsia-500",
-    icon: <Brain className="h-10 w-10 text-white/30" />,
-    avatars: ["🧑‍🔬", "👩‍⚕️", "🧠"],
-  },
-  {
-    id: "r2",
-    title: "Art History 101",
-    description:
-      "From Renaissance to Modernism, how well do you know the masters?",
-    badge: "New Content",
-    badgeBg: "bg-white/20 text-white",
-    gradient: "from-pink-500 via-rose-500 to-red-500",
-    icon: <Palette className="h-10 w-10 text-white/30" />,
-    avatars: ["🎨", "🖌️"],
-  },
-  {
-    id: "r3",
-    title: "Quantum Physics",
-    description:
-      "Dive into the bizarre world of quantum mechanics and wave-particle duality.",
-    badge: "Trending",
-    badgeBg: "bg-white/20 text-white",
-    gradient: "from-cyan-500 via-blue-500 to-indigo-500",
-    icon: <Atom className="h-10 w-10 text-white/30" />,
-    avatars: ["⚛️", "🔬", "🧪"],
-  },
-  {
-    id: "r4",
-    title: "Full-Stack Dev",
-    description:
-      "React, Node, databases & deployment — prove your full-stack skills.",
-    badge: "Advanced",
-    badgeBg: "bg-white/20 text-white",
-    gradient: "from-emerald-500 via-teal-500 to-cyan-500",
-    icon: <Code2 className="h-10 w-10 text-white/30" />,
-    avatars: ["💻", "🚀"],
-  },
-];
 
 // ── Difficulty badge color map ────────────────────────────────────────────────
 
@@ -200,34 +105,34 @@ const difficultyColors: Record<Difficulty, string> = {
   Hard: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400",
 };
 
-const categoryColors: Record<string, string> = {
-  Science:
-    "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-400",
-  Tech: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400",
-  Sports:
-    "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400",
-  History:
-    "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400",
-  Art: "bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-400",
-};
-
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function ExploreQuizzesPage() {
+  const { 
+    categories: fetchedCategories, 
+    setCategories: setStoreCategories, 
+    quizzes, 
+    setQuizzes: setStoreQuizzes 
+  } = useAppStore();
+
   const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [fetchedCategories, setFetchedCategories] = useState<CategoryType[]>(
-    [],
-  );
-  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingCategories, setLoadingCategories] = useState(fetchedCategories.length === 0);
   const [categoryError, setCategoryError] = useState<string | null>(null);
 
+  const [loadingQuizzes, setLoadingQuizzes] = useState(quizzes.length === 0);
+  const [quizzesError, setQuizzesError] = useState<string | null>(null);
+
+  const [difficultyFilter, setDifficultyFilter] = useState<string>("All");
+  const [creationModeFilter, setCreationModeFilter] = useState<string>("All");
+  const [sortBy, setSortBy] = useState<string>("Newest");
+
   useEffect(() => {
-    async function fetchCategories() {
+    async function fetchAllData() {
       try {
-        setLoadingCategories(true);
+        if (fetchedCategories.length === 0) setLoadingCategories(true);
         setCategoryError(null);
         const data = await getCategoryData();
-        setFetchedCategories(data);
+        setStoreCategories(data);
       } catch (err) {
         setCategoryError(
           err instanceof Error ? err.message : "Failed to load categories.",
@@ -235,14 +140,59 @@ export default function ExploreQuizzesPage() {
       } finally {
         setLoadingCategories(false);
       }
+
+      try {
+        if (quizzes.length === 0) setLoadingQuizzes(true);
+        setQuizzesError(null);
+        let qData: any = await getAllQuizzes();
+
+        if (qData && qData.success && Array.isArray(qData.data)) {
+          qData = qData.data;
+        } else if (Array.isArray(qData)) {
+          // qData is already an array
+        } else {
+          qData = [];
+        }
+        setStoreQuizzes(qData as Quiz[]);
+      } catch (err) {
+        setQuizzesError(
+          err instanceof Error ? err.message : "Failed to load quizzes.",
+        );
+      } finally {
+        setLoadingQuizzes(false);
+      }
     }
-    fetchCategories();
+    fetchAllData();
   }, []);
 
-  const filteredTrending =
-    activeCategory === "All"
-      ? trendingQuizzes
-      : trendingQuizzes.filter((q) => q.categories.includes(activeCategory));
+  let filteredQuizzes = quizzes.filter((q) => {
+    if (activeCategory !== "All") {
+      const categoryName =
+        fetchedCategories.find((c) => c.id === q.categoryId)?.name || "Unknown";
+      if (categoryName !== activeCategory) return false;
+    }
+    if (difficultyFilter !== "All" && q.difficulty !== difficultyFilter) {
+      return false;
+    }
+    if (creationModeFilter !== "All" && q.creationMode !== creationModeFilter) {
+      return false;
+    }
+    return true;
+  });
+
+  filteredQuizzes.sort((a, b) => {
+    if (sortBy === "Oldest") {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    }
+    if (sortBy === "PopularityDesc") {
+      return b.plays - a.plays;
+    }
+    if (sortBy === "PopularityAsc") {
+      return a.plays - b.plays;
+    }
+    // Default to Newest
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
 
   return (
     <div className="animate-fade-in min-h-[80vh]">
@@ -304,7 +254,7 @@ export default function ExploreQuizzesPage() {
                   transition-all duration-200 select-none
                   ${
                     activeCategory === cat.name
-                      ? "bg-gradient-to-r from-primary to-secondary text-white border-transparent shadow-md shadow-primary/25"
+                      ? "bg-purple-400 to-secondary text-white border-transparent shadow-md shadow-primary/25"
                       : "bg-card border-border/40 hover:border-border/70 hover:shadow-md text-foreground"
                   }
                 `}
@@ -330,142 +280,219 @@ export default function ExploreQuizzesPage() {
         )}
       </section>
 
-      {/* ── Trending Now ── */}
+      {/* ── All Quizzes ── */}
       <section className="mb-10 animate-slide-up">
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <h2 className="text-xl font-bold text-foreground tracking-tight">
-            Trending Now
+            All Quizzes
           </h2>
-          <button className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
-            View all
-          </button>
-        </div>
 
-        <div className="space-y-3">
-          {filteredTrending.length === 0 && (
-            <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center">
-              <p className="text-sm text-muted-foreground">
-                No quizzes found in this category yet.
-              </p>
-            </div>
-          )}
-
-          {filteredTrending.map((quiz) => (
-            <Link
-              key={quiz.id}
-              href={`/quiz/${quiz.id}`}
-              className="group flex items-center gap-4 rounded-2xl border border-border/40 bg-card p-4 shadow-sm hover:shadow-md hover:border-border/70 transition-all duration-200"
+          <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-1 px-1 sm:mx-0 sm:px-0">
+            {/* Filtering */}
+            <Select
+              value={difficultyFilter}
+              onValueChange={setDifficultyFilter}
             >
-              {/* Icon */}
-              <div
-                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${quiz.iconBg} shadow-sm`}
-              >
-                {quiz.icon}
-              </div>
+              <SelectTrigger className="w-fit h-8 sm:h-9 gap-1 sm:gap-2 px-2 sm:px-3 rounded-lg border-border bg-card text-[12px] sm:text-sm font-medium shrink-0">
+                <SelectValue placeholder="Difficulty" />
+              </SelectTrigger>
+              <SelectContent className="min-w-[100px] sm:min-w-[160px]">
+                <SelectItem value="All">All Difficulties</SelectItem>
+                <SelectItem value="Easy">Easy</SelectItem>
+                <SelectItem value="Medium">Medium</SelectItem>
+                <SelectItem value="Hard">Hard</SelectItem>
+              </SelectContent>
+            </Select>
 
-              {/* Details */}
-              <div className="min-w-0 flex-1">
-                {/* Tags row */}
-                <div className="mb-1 flex flex-wrap items-center gap-1.5">
-                  {quiz.categories.map((cat) => (
-                    <span
-                      key={cat}
-                      className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                        categoryColors[cat] ?? "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {cat}
-                    </span>
-                  ))}
-                  <span
-                    className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${difficultyColors[quiz.difficulty]}`}
-                  >
-                    {quiz.difficulty}
-                  </span>
-                </div>
-
-                {/* Title */}
-                <p className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
-                  {quiz.title}
-                </p>
-
-                {/* Meta */}
-                <div className="mt-0.5 flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <Eye className="h-3 w-3" /> {quiz.plays} plays
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Zap className="h-3 w-3 text-amber-500" /> +{quiz.xp} XP
-                  </span>
-                </div>
-              </div>
-
-              {/* Arrow */}
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/50 bg-muted/40 group-hover:bg-primary group-hover:border-primary transition-all duration-200">
-                <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-white transition-colors" />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Recommended for You ── */}
-      <section className="animate-slide-up animation-delay-200">
-        <h2 className="mb-4 text-xl font-bold text-foreground tracking-tight">
-          Recommended for You
-        </h2>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          {recommendedQuizzes.map((quiz) => (
-            <div
-              key={quiz.id}
-              className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${quiz.gradient} p-5 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}
+            <Select
+              value={creationModeFilter}
+              onValueChange={setCreationModeFilter}
             >
-              {/* Decorative icon in background */}
-              <div className="absolute right-4 top-4 opacity-30">
-                {quiz.icon}
-              </div>
+              <SelectTrigger className="w-fit h-8 sm:h-9 gap-1 sm:gap-2 px-2 sm:px-3 rounded-lg border-border bg-card text-[12px] sm:text-sm font-medium shrink-0">
+                <SelectValue placeholder="Creation Mode" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Modes</SelectItem>
+                <SelectItem value="Manual">Manual</SelectItem>
+                <SelectItem value="AI">AI</SelectItem>
+              </SelectContent>
+            </Select>
 
-              {/* Badge */}
-              <span
-                className={`inline-block rounded-lg px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${quiz.badgeBg} backdrop-blur-sm mb-6`}
-              >
-                {quiz.badge}
+            <div className="h-6 w-px bg-border shrink-0 hidden sm:block"></div>
+
+            {/* Sorting & Clear */}
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <span className="text-[12px] sm:text-sm font-medium text-muted-foreground whitespace-nowrap hidden xs:inline">
+                Sort by:
               </span>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-fit h-8 sm:h-9 gap-1 sm:gap-2 px-2 sm:px-3 rounded-lg border-border bg-card text-[12px] sm:text-sm font-medium shrink-0">
+                  <SelectValue placeholder="Sort By" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Newest">Newest to Oldest</SelectItem>
+                  <SelectItem value="Oldest">Oldest to Newest</SelectItem>
+                  <SelectItem value="PopularityDesc">
+                    Popularity (Most to Least)
+                  </SelectItem>
+                  <SelectItem value="PopularityAsc">
+                    Popularity (Least to Most)
+                  </SelectItem>
+                </SelectContent>
+              </Select>
 
-              {/* Title & Description */}
-              <h3 className="text-lg font-bold text-white mb-1.5">
-                {quiz.title}
-              </h3>
-              <p className="text-sm text-white/70 leading-relaxed mb-4 line-clamp-2">
-                {quiz.description}
-              </p>
-
-              {/* Footer: avatars + Play Now */}
-              <div className="flex items-center justify-between">
-                {/* Emoji avatars */}
-                <div className="flex -space-x-1.5">
-                  {quiz.avatars.map((emoji, i) => (
-                    <span
-                      key={i}
-                      className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-sm ring-2 ring-white/10"
-                    >
-                      {emoji}
-                    </span>
-                  ))}
-                </div>
-
-                <Link
-                  href={`/quiz/${quiz.id}`}
-                  className="inline-flex items-center gap-1 rounded-full bg-white px-4 py-1.5 text-xs font-bold text-gray-800 shadow-sm hover:bg-white/90 hover:shadow-md transition-all duration-200"
+              {/* Clear Filters / Sorting */}
+              {(difficultyFilter !== "All" ||
+                creationModeFilter !== "All" ||
+                sortBy !== "Newest" ||
+                activeCategory !== "All") && (
+                <button
+                  onClick={() => {
+                    setDifficultyFilter("All");
+                    setCreationModeFilter("All");
+                    setSortBy("Newest");
+                    setActiveCategory("All");
+                  }}
+                  className="px-2 py-1 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-semibold rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40 transition-colors shrink-0"
                 >
-                  Play Now
-                </Link>
-              </div>
+                  Clear
+                </button>
+              )}
             </div>
-          ))}
+          </div>
         </div>
+
+        {loadingQuizzes && (
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-44 w-full rounded-2xl bg-muted/50 animate-pulse"
+              />
+            ))}
+          </div>
+        )}
+
+        {quizzesError && (
+          <div className="rounded-2xl border border-dashed border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-6 text-center">
+            <p className="text-sm text-red-600 dark:text-red-400 font-medium">
+              {quizzesError}
+            </p>
+          </div>
+        )}
+
+        {!loadingQuizzes && !quizzesError && (
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+            {filteredQuizzes.length === 0 && (
+              <div className="col-span-full rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center">
+                <p className="text-sm text-muted-foreground">
+                  No quizzes found yet.
+                </p>
+              </div>
+            )}
+
+            {filteredQuizzes.map((quiz) => {
+              const categoryInfo = fetchedCategories.find(
+                (c) => c.id === quiz.categoryId,
+              );
+              const categoryName =
+                quiz.category?.name || categoryInfo?.name || "Unknown";
+              const categoryIcon = categoryInfo?.icon || "sparkles";
+
+              const iconColors = [
+                "bg-gradient-to-br from-violet-500 to-purple-600",
+                "bg-gradient-to-br from-blue-500 to-cyan-500",
+                "bg-gradient-to-br from-orange-400 to-red-500",
+                "bg-gradient-to-br from-pink-500 to-rose-500",
+                "bg-gradient-to-br from-green-500 to-emerald-500",
+                "bg-gradient-to-br from-amber-400 to-orange-500",
+              ];
+              const hash = (quiz.id || "")
+                .split("")
+                .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+              const iconBg = iconColors[hash % iconColors.length];
+
+              // Format timeAllocated (seconds) to "Xm Ys" mapping
+              const minutes = Math.floor(quiz.timeAllocated / 60);
+              const seconds = quiz.timeAllocated % 60;
+              const formattedTime =
+                minutes > 0
+                  ? `${minutes}m ${seconds > 0 ? `${seconds}s` : ""}`.trim()
+                  : `${seconds}s`;
+
+              return (
+                <Link
+                  key={quiz.id}
+                  href={`/explore/quiz/${quiz.id}`}
+                  className="group flex flex-col h-full rounded-2xl border border-border/40 bg-card p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-border/70 transition-all duration-200"
+                >
+                  {/* Details */}
+                  <div className="flex flex-col h-full">
+                    {/* Tags row */}
+                    <div className="mb-1 flex items-center gap-1 sm:gap-1.5 overflow-x-auto scrollbar-hide whitespace-nowrap -mx-0.5 px-0.5">
+                      <span className="inline-block rounded-md px-1.5 py-0.5 sm:px-2  text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider bg-purple-400 text-white">
+                        {quiz.category?.name || "Unknown"}
+                      </span>
+                      <span
+                        className={`inline-block rounded-md px-1.5 py-0.5 sm:px-2 text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider ${difficultyColors[quiz.difficulty as Difficulty] ?? "bg-muted text-muted-foreground"}`}
+                      >
+                        {quiz.difficulty}
+                      </span>
+                      {quiz.isPrivate && (
+                        <span className="inline-block rounded-md px-1.5 py-0.5 sm:px-2 text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider bg-zinc-800 text-zinc-100 dark:bg-zinc-200 dark:text-zinc-800">
+                          Private
+                        </span>
+                      )}
+                      {quiz.isDraft && (
+                        <span className="inline-block rounded-md px-1.5 py-0.5 sm:px-2 text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider bg-orange-200 text-orange-800 dark:bg-orange-900/40 dark:text-orange-400">
+                          Draft
+                        </span>
+                      )}
+                      <span className="inline-block rounded-md px-1.5 py-0.5 sm:px-2 text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400">
+                        Mode: {quiz.creationMode}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <p className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                      {quiz.title}
+                    </p>
+
+                    {/* Description */}
+                    {quiz.description && (
+                      <p className="mt-2 text-xs text-muted-foreground line-clamp-2">
+                        {quiz.description}
+                      </p>
+                    )}
+
+                    {/* Meta Pinned to Bottom */}
+                    <div className="mt-auto pt-3 sm:pt-4 border-t border-border/40">
+                      <div className="flex items-center gap-x-2.5 sm:gap-x-3 text-[10px] sm:text-xs text-muted-foreground overflow-x-auto scrollbar-hide whitespace-nowrap -mx-0.5 px-0.5">
+                        <span className="flex items-center gap-1">
+                          <HelpCircle className="h-3 w-3" />{" "}
+                          {quiz._count?.questions ?? 0}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" /> {formattedTime}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Eye className="h-3 w-3" /> {quiz.plays}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <User className="h-3 w-3" />{" "}
+                          {quiz.creator?.username ?? "Unknown"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </section>
+
+      {/* ── Trending ── */}
     </div>
   );
 }

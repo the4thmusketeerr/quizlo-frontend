@@ -19,7 +19,7 @@ import { getProfile, getLevelLabel } from "@/lib/user";
 import { useAppStore } from "@/store/useAppStore";
 import { goeyToast } from "@/components/ui/goey-toaster";
 
-export function HomeNavbar() {
+export function AppNavbar() {
   const router = useRouter();
   const { profile: storeProfile, setProfile: setStoreProfile, clearAllData } = useAppStore();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -106,18 +106,18 @@ export function HomeNavbar() {
               aria-label="Profile menu"
             >
               {/* Avatar */}
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold select-none">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold select-none overflow-hidden">
                 {profileData.avatar ? (
                   <img
                     src={profileData.avatar}
                     alt="Profile"
-                    className="h-8 w-8 rounded-full"
+                    className="h-8 w-8 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold select-none">
+                  <span>
                     {profileData.firstName.charAt(0).toUpperCase() +
                       profileData.lastName.charAt(0).toUpperCase()}
-                  </div>
+                  </span>
                 )}
               </div>
               <ChevronDown
@@ -138,32 +138,31 @@ export function HomeNavbar() {
                 <div className="absolute right-0 z-50 mt-2 w-52 rounded-2xl border border-border/50 bg-popover shadow-xl ring-1 ring-black/5 overflow-hidden">
                   {/* User info header */}
                   <div className="flex items-center gap-3 px-4 py-3 border-b border-border/50 bg-muted/30">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold overflow-hidden">
                       {profileData.avatar ? (
                         <img
                           src={profileData.avatar}
                           alt="Profile"
-                          className="h-8 w-8 rounded-full"
+                          className="h-9 w-9 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold select-none">
+                        <span className="select-none">
                           {profileData.firstName.charAt(0).toUpperCase() +
                             profileData.lastName.charAt(0).toUpperCase()}
-                        </div>
+                        </span>
                       )}
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-foreground truncate">
-                        {profileData.firstName}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
                         {profileData.username}
+                      </p>
+                      {/* <p className="text-xs text-muted-foreground truncate">
                         {storeProfile?.level ? (
                           <span className="ml-1 text-purple-500 font-bold">
-                            · {getLevelLabel(storeProfile.level)}
+                            {getLevelLabel(storeProfile.level)}
                           </span>
                         ) : null}
-                      </p>
+                      </p> */}
                     </div>
                   </div>
 

@@ -6,6 +6,21 @@
 
 import { getToken } from "@/lib/auth";
 
+// XP Level labels — index 0 = Level 1, index 29 = Level 30
+export const LEVEL_LABELS = [
+  "Novice", "Initiate", "Apprentice", "Student", "Scholar",
+  "Thinker", "Analyst", "Researcher", "Debater", "Expert",
+  "Veteran", "Specialist", "Intellectual", "Prodigy", "Sage",
+  "Master", "Champion", "Virtuoso", "Luminary", "Grandmaster",
+  "Titan", "Prodigy Elite", "Oracle", "Visionary", "Legend",
+  "Mythic", "Transcendent", "Ascendant", "Eternal", "Omniscient",
+] as const;
+
+/** Returns the level label for a given 1-based level number */
+export function getLevelLabel(level: number): string {
+  return LEVEL_LABELS[Math.min(Math.max(level, 1), 30) - 1];
+}
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
 // Type definitions
@@ -17,6 +32,8 @@ export interface ProfileData {
   email: string;
   profilePicture?: string;
   createdAt?: string;
+  level?: number;
+  xp?: number;
 }
 
 export interface ChangePasswordRequest {
@@ -28,6 +45,78 @@ export interface UserResponse {
   success: boolean;
   message?: string;
   data?: ProfileData;
+  /** XP awarded for the first GET /user/me call of the calendar day (0 = already claimed today) */
+  dailyLoginXP?: number;
+}
+
+export interface Quiz {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: string;
+  timeAllocated: number;
+  isPrivate: boolean;
+  isDraft: boolean;
+  creationMode: string;
+  plays: number;
+  categoryId: string;
+  creatorId: string;
+  createdAt: string;
+  updatedAt: string;
+  category: {
+    name: string;
+  };
+  _count: {
+    questions: number;
+  };
+}
+
+export interface UserQuizzesResponse {
+  success: boolean;
+  message?: string;
+  data?: Quiz[];
+}
+
+export interface XpProgress {
+  currentLevel: number;
+  label: string;
+  tier: string;
+  xpIntoLevel: number;
+  xpToNextLevel: number | null; // null at max level (30)
+  progressPercentage: number;
+}
+
+export interface DashboardData {
+  profile: {
+    username: string;
+    xp: number;
+    level: number;
+    streak: number;
+    profilePicture?: string;
+  };
+  goals?: {
+    xpProgress: XpProgress;
+  };
+  myQuizzes: Quiz[];
+  statistics: {
+    totalQuizzesPlayed: number;
+    totalQuizzesCreated: number;
+    averageAccuracy: number;
+    totalXPEarned: number;
+  };
+  recentActivity: {
+    id: string;
+    quiz: { title: string };
+    score: number;
+    accuracy: number;
+    completedAt: string;
+  }[];
+}
+
+export interface DashboardResponse {
+  success: boolean;
+  message?: string;
+  data: DashboardData;
 }
 
 /**
@@ -37,7 +126,7 @@ export async function getProfile(): Promise<UserResponse> {
   try {
     const token = getToken();
 
-    const response = await fetch(`${API_BASE_URL}/user/profile`, {
+    const response = await fetch(`${API_BASE_URL}/user/me`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -57,6 +146,68 @@ export async function getProfile(): Promise<UserResponse> {
       throw new Error(error.message);
     }
     throw new Error("An unexpected error occurred while fetching profile.");
+  }
+}
+
+/**
+ * Update user username
+ */
+export async function updateUsername(username: string): Promise<UserResponse> {
+  try {
+    const token = getToken();
+
+    const response = await fetch(`${API_BASE_URL}/user/update`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ username }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to update username.");
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unexpected error occurred while updating username.");
+  }
+}
+
+/**
+ * Update user email
+ */
+export async function updateEmail(email: string, password: string): Promise<UserResponse> {
+  try {
+    const token = getToken();
+
+    const response = await fetch(`${API_BASE_URL}/user/update`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to update email.");
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unexpected error occurred while updating email.");
   }
 }
 
@@ -167,5 +318,61 @@ export async function deleteProfilePicture(): Promise<{ success: boolean; messag
     throw new Error(
       "An unexpected error occurred while deleting profile picture.",
     );
+  }
+}
+
+
+export async function getUserQuizzes(): Promise<UserQuizzesResponse> {
+  try {
+    const token = getToken();
+    const response = await fetch(`${API_BASE_URL}/user/quizzes`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to fetch quizzes.");
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unexpected error occurred while fetching quizzes.");
+  }
+}
+
+/**
+ * Fetch dashboard data for the authenticated user
+ */
+export async function getDashboardData(): Promise<DashboardResponse> {
+  try {
+    const token = getToken();
+    const response = await fetch(`${API_BASE_URL}/user/dashboard`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to fetch dashboard data.");
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unexpected error occurred while fetching dashboard data.");
   }
 }

@@ -2,15 +2,15 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Proxy middleware to protect routes from unauthorized access
+ * Middleware to protect routes from unauthorized access
  * Runs before every route in the application
- * Note: Next.js uses "proxy.ts" as the new convention (replacing "middleware.ts")
  */
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   // Get the pathname of the request
   const { pathname } = request.nextUrl;
 
   // Define public routes that don't require authentication
+  // We use startsWith or exact match depending on the route
   const publicRoutes = ["/", "/login", "/register", "/forgot-password", "/reset-password"];
 
   // Check if the current route is public
@@ -21,9 +21,8 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check for authentication token in cookies or try to get it from localStorage via request headers
-  // Note: In Next.js middleware, we can't access localStorage directly
-  // We'll use a cookie-based approach for server-side auth checking
+  // Check for authentication token in cookies
+  // Note: localStorage isn't available server-side
   const token = request.cookies.get("auth_token")?.value;
 
   // If no token is found, redirect to login
@@ -40,11 +39,6 @@ export function proxy(request: NextRequest) {
 
 /**
  * Configure which routes the middleware should run on
- * This matcher ensures middleware runs on all routes except:
- * - API routes
- * - Static files (_next/static)
- * - Image optimization files (_next/image)
- * - Favicon and other public files
  */
 export const config = {
   matcher: [
@@ -54,7 +48,7 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public folder files
+     * - public folder files (with extensions)
      */
     "/((?!api|_next/static|_next/image|favicon.ico|.*\\..*|_next).*)",
   ],
