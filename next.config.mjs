@@ -4,7 +4,10 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    turbo: false,
+    // This tells Turbopack exactly where your project root is
+    turbopack: {
+      root: "./",
+    },
   },
 };
 
