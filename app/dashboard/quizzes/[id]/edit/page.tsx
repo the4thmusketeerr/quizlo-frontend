@@ -155,6 +155,8 @@ export default function EditQuizPage() {
   const [difficulty, setDifficulty] = useState<Difficulty>("Easy");
   const [isPrivate, setIsPrivate] = useState(false);
   const [isDraft, setIsDraft] = useState(false);
+  const [coverPicture, setCoverPicture] = useState<File | null>(null);
+  const [coverPictureUrl, setCoverPictureUrl] = useState<string>("");
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(10);
 
@@ -195,6 +197,7 @@ export default function EditQuizPage() {
         setIsPrivate(quiz.isPrivate ?? false);
         setIsDraft(quiz.isDraft ?? false);
         setCategoryId(quiz.categoryId ?? "");
+        setCoverPictureUrl(quiz.coverPicture ?? "");
 
         const totalSeconds = quiz.timeAllocated ?? 0;
         setHours(Math.floor(totalSeconds / 3600));
@@ -388,6 +391,17 @@ export default function EditQuizPage() {
 
     setIsSaving(true);
     try {
+      // 1. Upload cover picture if new File present
+      let uploadedCoverUrl = coverPictureUrl;
+      if (coverPicture) {
+        try {
+          const url = await uploadToImageKit(coverPicture);
+          if (url) uploadedCoverUrl = url;
+        } catch (err: any) {
+          throw new Error(`Cover picture upload failed: ${err.message}`);
+        }
+      }
+
       const formattedQuestions = await Promise.all(
         questions.map(async (q) => {
           // Upload new media if File object present
@@ -428,6 +442,7 @@ export default function EditQuizPage() {
         description,
         categoryId,
         difficulty,
+        coverPicture: uploadedCoverUrl,
         timeAllocated: hours * 3600 + minutes * 60,
         isPrivate,
         isDraft: asDraft ?? isDraft,
@@ -545,6 +560,52 @@ export default function EditQuizPage() {
               rows={3}
               className="resize-y rounded-xl border-border/60 bg-muted/40 placeholder:text-muted-foreground/60 focus-visible:ring-purple-500/40"
             />
+          </div>
+
+          {/* Cover Picture */}
+          <div className="mt-4">
+            <label className="mb-1.5 block text-sm font-semibold text-foreground">
+              Cover Picture
+            </label>
+            {!coverPictureUrl ? (
+              <label className="cursor-pointer flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border/60 bg-muted/20 hover:bg-muted/40 transition-colors p-6 text-muted-foreground hover:text-purple-600 w-full hover:border-purple-300">
+                <Upload className="w-6 h-6 mb-1" />
+                <span className="text-sm font-medium">Click to upload a cover picture</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = URL.createObjectURL(file);
+                      setCoverPicture(file);
+                      setCoverPictureUrl(url);
+                    }
+                  }}
+                />
+              </label>
+            ) : (
+              <div className="relative inline-flex border border-border/50 rounded-xl overflow-hidden bg-muted/30 w-full">
+                <img
+                  src={coverPictureUrl}
+                  alt="Cover Picture Preview"
+                  className="max-h-48 w-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (coverPictureUrl.startsWith("blob:")) URL.revokeObjectURL(coverPictureUrl);
+                    setCoverPicture(null);
+                    setCoverPictureUrl("");
+                  }}
+                  className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1.5 transition-colors shadow-md backdrop-blur-md"
+                  title="Remove cover picture"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
         </section>
 

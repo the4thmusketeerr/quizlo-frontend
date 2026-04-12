@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { GradientButton } from "@/components/custom/gradient-button";
 import { AnimatedCard } from "@/components/custom/animated-card";
-import { Zap, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { Zap, Eye, EyeOff } from "lucide-react";
 import { login, storeToken } from "@/lib/auth";
 
 function LoginForm() {
@@ -62,85 +62,73 @@ function LoginForm() {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <Link
-          href="/"
-          className="mb-6 inline-flex items-center gap-2 text-muted-foreground transition-smooth hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to home
-        </Link>
-        <div className="mb-4 flex justify-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
-            <Zap className="h-8 w-8 text-white" />
-          </div>
-        </div>
-        <h1 className="text-2xl font-bold text-foreground">Welcome Back</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Sign in to your QuizMind account
+
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          Welcome Back
+        </h1>
+        <p className="mt-2 text-muted-foreground">
+          Sign in to your Quizlo account
         </p>
       </div>
 
-      {/* Form Card */}
-      <AnimatedCard hover="glow">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="h-12 bg-muted/50 border-border/50 focus:border-[#A855F7] focus:ring-[#A855F7]/20"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">Password</Label>
+            <Link
+              href="/forgot-password"
+              className="text-xs font-semibold text-[#A855F7] transition-smooth hover:text-indigo-600"
+            >
+              Forgot password?
+            </Link>
+          </div>
+          <div className="relative">
             <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              className="bg-card/50 border-border/50"
+              className="h-12 bg-muted/50 border-border/50 pr-10 focus:border-[#A855F7] focus:ring-[#A855F7]/20"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
           </div>
+        </div>
 
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
-              <Link
-                href="/forgot-password"
-                className="text-xs text-primary transition-smooth hover:text-accent"
-              >
-                Forgot password?
-              </Link>
-            </div>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="bg-card/50 border-border/50 pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </button>
-            </div>
-          </div>
+        <Button
+          type="submit"
+          disabled={loading}
+          className="h-12 w-full bg-gradient-to-r from-[#A855F7] to-indigo-600 text-lg font-bold text-white shadow-lg shadow-purple-500/25 transition-smooth hover:scale-[1.02] hover:shadow-purple-500/40 active:scale-[0.98]"
+        >
+          {loading ? "Signing in..." : "Sign In"}
+        </Button>
+      </form>
 
-          <GradientButton
-            type="submit"
-            disabled={loading}
-            className="w-full"
-            size="md"
-          >
-            {loading ? "Signing in..." : "Sign In"}
-          </GradientButton>
-        </form>
-      </AnimatedCard>
 
       {/* Divider */}
       <div className="relative">

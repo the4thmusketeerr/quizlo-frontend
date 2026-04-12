@@ -127,6 +127,8 @@ export default function CreateQuizPage() {
   // ── Shared form state ──
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [coverPicture, setCoverPicture] = useState<File | null>(null);
+  const [coverPictureUrl, setCoverPictureUrl] = useState<string>("");
   const [category, setCategory] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
   const [difficulty, setDifficulty] = useState<Difficulty>("Easy");
@@ -533,6 +535,19 @@ export default function CreateQuizPage() {
     }
     setIsPublishing(true);
     try {
+      let uploadedCoverPictureUrl = "";
+      if (coverPicture) {
+        try {
+          const url = await uploadToImageKit(coverPicture);
+          if (url) {
+            uploadedCoverPictureUrl = url;
+          }
+        } catch (error: any) {
+          console.error("Failed to upload cover picture:", error);
+          throw new Error(`Failed to upload cover picture: ${error.message || "Unknown error"}`);
+        }
+      }
+
       const qs = mode === "manual" ? questions : aiGeneratedQuestions;
       const formattedQuestions = await Promise.all(qs.map(async (q) => {
         let mappedType = "Mcq";
@@ -633,6 +648,7 @@ export default function CreateQuizPage() {
       const payload = {
         title,
         description,
+        coverPicture: uploadedCoverPictureUrl,
         categoryId: category, // Using category name directly for now, backend or future logic can map to actual ID
         difficulty,
         timeAllocated: hours * 3600 + minutes * 60,
@@ -761,6 +777,51 @@ export default function CreateQuizPage() {
               rows={3}
               className="rounded-xl border-border/60 bg-muted/40 placeholder:text-muted-foreground/60 focus-visible:ring-purple-500/40 resize-y"
             />
+          </div>
+
+          <div className="mt-4">
+            <label className="mb-1.5 block text-sm font-semibold text-foreground">
+              Cover Picture
+            </label>
+            {!coverPictureUrl ? (
+              <label className="cursor-pointer flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border/60 bg-muted/20 hover:bg-muted/40 transition-colors p-6 text-muted-foreground hover:text-purple-600 w-full hover:border-purple-300 dark:hover:border-purple-700">
+                <Upload className="w-6 h-6 mb-1" />
+                <span className="text-sm font-medium">Click to upload a cover picture</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = URL.createObjectURL(file);
+                      setCoverPicture(file);
+                      setCoverPictureUrl(url);
+                    }
+                  }}
+                />
+              </label>
+            ) : (
+              <div className="relative inline-flex border border-border/50 rounded-xl overflow-hidden bg-muted/30 w-full">
+                <img
+                  src={coverPictureUrl}
+                  alt="Cover Picture Preview"
+                  className="max-h-48 w-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (coverPictureUrl) URL.revokeObjectURL(coverPictureUrl);
+                    setCoverPicture(null);
+                    setCoverPictureUrl("");
+                  }}
+                  className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1.5 transition-colors shadow-md backdrop-blur-md"
+                  title="Remove cover picture"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
         </section>
 

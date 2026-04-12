@@ -19,6 +19,7 @@ interface QuizCardProps {
   creationMode?: string
   updatedAt?: string
   createdAt?: string
+  coverPicture?: string
   viewMode?: 'grid' | 'list'
   onDelete?: (id: string) => void
   onShare?: (id: string) => void
@@ -47,6 +48,7 @@ export function QuizCard({
   creationMode = "Manual",
   updatedAt,
   createdAt,
+  coverPicture,
   viewMode = 'grid',
   onDelete,
   onShare,
@@ -113,8 +115,25 @@ export function QuizCard({
   }
 
   return (
-    <div className="group flex flex-col h-full rounded-2xl border border-border/40 bg-card p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-border/70 transition-all duration-200">
-      <Link href={`/dashboard/quizzes/${id}/view`} className="flex-1">
+    <div className="group flex flex-col h-full rounded-2xl border border-border/40 bg-card p-3 shadow-sm hover:shadow-md hover:border-border/70 transition-all duration-200">
+      {/* Cover Picture */}
+      <div className="relative mb-3 h-28 w-full overflow-hidden rounded-xl sm:h-32 md:h-40 lg:h-48">
+        {coverPicture ? (
+          <img
+            src={coverPicture}
+            alt={title}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+        ) : (
+          <img
+            src="https://placehold.net/600x600.png"
+            alt={title}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+        )}
+      </div>
+
+      <Link href={`/dashboard/quizzes/${id}/view`} className="flex-1 px-1">
         {/* Tags row */}
         <div className="mb-3 flex flex-wrap items-center gap-1.5">
           <span className="inline-block rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-purple-400 text-white">

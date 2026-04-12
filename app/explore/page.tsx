@@ -126,6 +126,24 @@ export default function ExploreQuizzesPage() {
   const [creationModeFilter, setCreationModeFilter] = useState<string>("All");
   const [sortBy, setSortBy] = useState<string>("Newest");
 
+  // ── Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerPage(window.innerWidth < 768 ? 8 : 12);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory, difficultyFilter, creationModeFilter, sortBy]);
+
   useEffect(() => {
     async function fetchAllData() {
       try {
@@ -194,6 +212,12 @@ export default function ExploreQuizzesPage() {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
+  const totalPages = Math.ceil(filteredQuizzes.length / itemsPerPage);
+  const paginatedQuizzes = filteredQuizzes.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
+
   return (
     <div className="animate-fade-in min-h-[80vh]">
       {/* ── Breadcrumb / Back ── */}
@@ -217,9 +241,29 @@ export default function ExploreQuizzesPage() {
 
       {/* ── Categories ── */}
       <section className="mb-10">
-        <h2 className="mb-4 text-xl font-bold text-foreground tracking-tight">
-          Categories
-        </h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-xl font-bold text-foreground tracking-tight">
+            Categories
+          </h2>
+
+          {(difficultyFilter !== "All" ||
+            creationModeFilter !== "All" ||
+            sortBy !== "Newest" ||
+            activeCategory !== "All") && (
+            <button
+              onClick={() => {
+                setDifficultyFilter("All");
+                setCreationModeFilter("All");
+                setSortBy("Newest");
+                setActiveCategory("All");
+              }}
+              className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40 transition-colors shrink-0"
+            >
+              Clear Filters
+            </button>
+          )}
+        </div>
+        
 
         {loadingCategories && (
           <div className="flex gap-3 overflow-hidden">
@@ -287,7 +331,7 @@ export default function ExploreQuizzesPage() {
             All Quizzes
           </h2>
 
-          <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-1 px-1 sm:mx-0 sm:px-0">
+          <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 py-2 scrollbar-hide -mx-1 px-1  sm:mx-0 sm:px-0">
             {/* Filtering */}
             <Select
               value={difficultyFilter}
@@ -340,24 +384,6 @@ export default function ExploreQuizzesPage() {
                   </SelectItem>
                 </SelectContent>
               </Select>
-
-              {/* Clear Filters / Sorting */}
-              {(difficultyFilter !== "All" ||
-                creationModeFilter !== "All" ||
-                sortBy !== "Newest" ||
-                activeCategory !== "All") && (
-                <button
-                  onClick={() => {
-                    setDifficultyFilter("All");
-                    setCreationModeFilter("All");
-                    setSortBy("Newest");
-                    setActiveCategory("All");
-                  }}
-                  className="px-2 py-1 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-semibold rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40 transition-colors shrink-0"
-                >
-                  Clear
-                </button>
-              )}
             </div>
           </div>
         </div>
@@ -391,7 +417,7 @@ export default function ExploreQuizzesPage() {
               </div>
             )}
 
-            {filteredQuizzes.map((quiz) => {
+            {paginatedQuizzes.map((quiz) => {
               const categoryInfo = fetchedCategories.find(
                 (c) => c.id === quiz.categoryId,
               );
@@ -424,10 +450,27 @@ export default function ExploreQuizzesPage() {
                 <Link
                   key={quiz.id}
                   href={`/explore/quiz/${quiz.id}`}
-                  className="group flex flex-col h-full rounded-2xl border border-border/40 bg-card p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-border/70 transition-all duration-200"
+                  className="group flex flex-col h-full rounded-2xl border border-border/40 bg-card p-3 shadow-sm hover:shadow-md hover:border-border/70 transition-all duration-200"
                 >
+                  {/* Cover Picture or Gradient Fallback */}
+                  <div className="relative mb-3 h-28 w-full overflow-hidden rounded-xl sm:h-32 md:h-40 lg:h-48">
+                    {quiz.coverPicture ? (
+                      <img
+                        src={quiz.coverPicture}
+                        alt={quiz.title}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    ) : (
+                      <img
+                        src="https://placehold.net/600x600.png"
+                        alt={quiz.title}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
+                  </div>
+
                   {/* Details */}
-                  <div className="flex flex-col h-full">
+                  <div className="flex flex-col h-full px-1">
                     {/* Tags row */}
                     <div className="mb-1 flex items-center gap-1 sm:gap-1.5 overflow-x-auto scrollbar-hide whitespace-nowrap -mx-0.5 px-0.5">
                       <span className="inline-block rounded-md px-1.5 py-0.5 sm:px-2  text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider bg-purple-400 text-white">
@@ -488,6 +531,74 @@ export default function ExploreQuizzesPage() {
                 </Link>
               );
             })}
+          </div>
+        )}
+
+        {/* ── Pagination Controls ── */}
+        {!loadingQuizzes && !quizzesError && totalPages > 1 && (
+          <div className="mt-10 flex flex-col items-center justify-center gap-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-foreground transition-all hover:bg-accent disabled:opacity-40 disabled:hover:bg-card"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }).map((_, i) => {
+                  const pageNumber = i + 1;
+                  // Show current page, first, last, and pages around current
+                  if (
+                    pageNumber === 1 ||
+                    pageNumber === totalPages ||
+                    (pageNumber >= currentPage - 1 &&
+                      pageNumber <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={pageNumber}
+                        onClick={() => setCurrentPage(pageNumber)}
+                        className={`flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold transition-all ${
+                          currentPage === pageNumber
+                            ? "bg-purple-600 text-white shadow-md shadow-purple-500/20"
+                            : "bg-card border border-border text-foreground hover:bg-accent"
+                        }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  } else if (
+                    pageNumber === currentPage - 2 ||
+                    pageNumber === currentPage + 2
+                  ) {
+                    return (
+                      <span
+                        key={pageNumber}
+                        className="flex h-9 w-9 items-center justify-center text-muted-foreground"
+                      >
+                        •
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+
+              <button
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
+                disabled={currentPage === totalPages}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-foreground transition-all hover:bg-accent disabled:opacity-40 disabled:hover:bg-card"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+            {/* <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+              Page {currentPage} of {totalPages}
+            </p> */}
           </div>
         )}
       </section>

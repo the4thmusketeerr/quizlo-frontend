@@ -29,6 +29,7 @@ export interface Quiz {
   creatorId: string;
   createdAt: string;
   updatedAt: string;
+  coverPicture: string;
   creator: {
     username: string;
     profilePicture: string | null;

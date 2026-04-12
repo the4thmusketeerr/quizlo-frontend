@@ -66,7 +66,7 @@ export function HomeNavbar() {
         {/* Logo */}
         <Link href="/home" className="flex items-center gap-2 shrink-0">
           <Image
-            src="/logo.png"
+            src="/quiz-logo.png"
             alt="Quizlo Logo"
             width={106}
             height={106}
@@ -114,7 +114,7 @@ export function HomeNavbar() {
                     className="h-8 w-8 rounded-full"
                   />
                 ) : (
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold select-none">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#A855F7] text-white text-sm font-bold select-none">
                     {profileData.firstName.charAt(0).toUpperCase() +
                       profileData.lastName.charAt(0).toUpperCase()}
                   </div>
@@ -146,7 +146,7 @@ export function HomeNavbar() {
                           className="h-8 w-8 rounded-full"
                         />
                       ) : (
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold select-none">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#A855F7] text-white text-sm font-bold select-none">
                           {profileData.firstName.charAt(0).toUpperCase() +
                             profileData.lastName.charAt(0).toUpperCase()}
                         </div>
@@ -154,15 +154,7 @@ export function HomeNavbar() {
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-foreground truncate">
-                        {profileData.firstName}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
                         {profileData.username}
-                        {storeProfile?.level ? (
-                          <span className="ml-1 text-purple-500 font-bold">
-                            · {getLevelLabel(storeProfile.level)}
-                          </span>
-                        ) : null}
                       </p>
                     </div>
                   </div>

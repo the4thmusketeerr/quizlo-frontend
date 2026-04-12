@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GradientButton } from "@/components/custom/gradient-button";
 import { AnimatedCard } from "@/components/custom/animated-card";
-import { Zap, ArrowLeft, Mail, CheckCircle2 } from "lucide-react";
+import { Zap, Mail, CheckCircle2 } from "lucide-react";
 import { forgotPassword } from "@/lib/auth";
 
 export default function ForgotPasswordPage() {
@@ -36,15 +36,6 @@ export default function ForgotPasswordPage() {
   if (submitted) {
     return (
       <div className="space-y-6">
-        {/* Header */}
-        <div className="text-center">
-          <div className="mb-4 flex justify-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
-              <Zap className="h-8 w-8 text-white" />
-            </div>
-          </div>
-        </div>
-
         {/* Success Card */}
         <AnimatedCard hover="glow">
           <div className="flex flex-col items-center gap-4 py-4 text-center">
@@ -94,18 +85,8 @@ export default function ForgotPasswordPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <Link
-          href="/login"
-          className="mb-6 inline-flex items-center gap-2 text-muted-foreground transition-smooth hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to login
-        </Link>
-        <div className="mb-4 flex justify-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
-            <Zap className="h-8 w-8 text-white" />
-          </div>
-        </div>
+
+        
         <h1 className="text-2xl font-bold text-foreground">Forgot Password?</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           No worries! Enter your email and we&apos;ll send you a reset link.

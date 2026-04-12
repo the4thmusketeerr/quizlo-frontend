@@ -127,7 +127,7 @@ export default function SettingsPage() {
     <main className="min-h-screen bg-[#F8F9FE] dark:bg-background pb-12">
       <div className="max-w-[540px] mx-auto px-4 pt-8 space-y-8">
         {/* Navigation / Back Button */}
-        <div className="flex items-center mb-2">
+        {/* <div className="flex items-center mb-2">
           <Button 
             variant="ghost" 
             size="sm" 
@@ -137,7 +137,7 @@ export default function SettingsPage() {
             <ChevronLeft className="mr-1.5 h-4 w-4 transition-transform group-hover:-translate-x-1" />
             Back
           </Button>
-        </div>
+        </div> */}
 
         {/* PROFILE SECTION */}
         <SectionTitle title="PROFILE" />
@@ -147,7 +147,7 @@ export default function SettingsPage() {
               <Avatar className="h-20 w-20 border-2 border-white dark:border-border shadow-sm">
                 <AvatarImage src={profileData.avatar} />
                 <AvatarFallback className="bg-[#A855F7] text-white text-xl">
-                  {profileData.username?.[0]?.toUpperCase() || "U"}
+                  {profileData.firstName?.[0]?.toUpperCase() + profileData.lastName?.[0]?.toUpperCase() || "U"}
                 </AvatarFallback>
               </Avatar>
               {/* <div 
@@ -294,7 +294,7 @@ export default function SettingsPage() {
 
 function SectionTitle({ title }: { title: string }) {
   return (
-    <h3 className="text-[12px] font-bold tracking-wider text-[#A855F7] ml-2 mb-2 uppercase">
+    <h3 className="text-[12px] font-bold tracking-wider text-[#A855F7] ml-2 mb-1 uppercase">
       {title}
     </h3>
   );

@@ -21,7 +21,11 @@ import { goeyToast } from "@/components/ui/goey-toaster";
 
 export function AppNavbar() {
   const router = useRouter();
-  const { profile: storeProfile, setProfile: setStoreProfile, clearAllData } = useAppStore();
+  const {
+    profile: storeProfile,
+    setProfile: setStoreProfile,
+    clearAllData,
+  } = useAppStore();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const profileData = {
@@ -66,7 +70,7 @@ export function AppNavbar() {
         {/* Logo */}
         <Link href="/home" className="flex items-center gap-2 shrink-0">
           <Image
-            src="/logo.png"
+            src="/quiz-logo.png"
             alt="Quizlo Logo"
             width={106}
             height={106}
@@ -106,7 +110,7 @@ export function AppNavbar() {
               aria-label="Profile menu"
             >
               {/* Avatar */}
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold select-none overflow-hidden">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#A855F7] text-white text-sm font-bold select-none overflow-hidden">
                 {profileData.avatar ? (
                   <img
                     src={profileData.avatar}
@@ -138,7 +142,7 @@ export function AppNavbar() {
                 <div className="absolute right-0 z-50 mt-2 w-52 rounded-2xl border border-border/50 bg-popover shadow-xl ring-1 ring-black/5 overflow-hidden">
                   {/* User info header */}
                   <div className="flex items-center gap-3 px-4 py-3 border-b border-border/50 bg-muted/30">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white text-sm font-bold overflow-hidden">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#A855F7] text-white text-sm font-bold overflow-hidden">
                       {profileData.avatar ? (
                         <img
                           src={profileData.avatar}

@@ -124,26 +124,37 @@ export default function QuizOverviewPage() {
 
       <main className="mx-auto max-w-2xl px-4 pt-24">
         {/* ── Header Card ── */}
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#9D4EDD] to-[#7B2CBF] p-8 text-white shadow-xl">
-          <div className="relative z-10 flex flex-col gap-4 pr-32">
+        <div className="relative overflow-hidden rounded-[2.5rem] p-8 text-white shadow-xl min-h-[220px] flex flex-col justify-end">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <img
+              src={quiz.coverPicture || "https://placehold.net/600x600.png"}
+              alt={quiz.title}
+              className="h-full w-full object-cover"
+            />
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#7B2CBF] via-[#9D4EDD]/70 to-transparent" />
+          </div>
+
+          <div className="relative z-10 flex flex-col gap-3">
             <div className="flex gap-2">
-              <Badge variant="secondary" className="bg-white/20 text-[10px] font-bold uppercase tracking-wider text-white border-none px-3 py-1">
+              <Badge variant="secondary" className="bg-white/20 text-[10px] font-bold uppercase tracking-wider text-white border-none px-3 py-1 backdrop-blur-md">
                 {quiz.category?.name || "General"}
               </Badge>
-              <Badge variant="secondary" className="bg-white/20 text-[10px] font-bold uppercase tracking-wider text-white border-none px-3 py-1">
+              <Badge variant="secondary" className="bg-white/20 text-[10px] font-bold uppercase tracking-wider text-white border-none px-3 py-1 backdrop-blur-md">
                 {quiz.difficulty}
               </Badge>
             </div>
             <h2 className="text-3xl font-extrabold leading-tight">
               {quiz.title}
             </h2>
-            <p className="text-sm font-medium text-white/80 line-clamp-2">
+            <p className="text-sm font-medium text-white/90 line-clamp-2">
               {quiz.description}
             </p>
           </div>
           
           {/* Rocket Icon Container */}
-          <div className="absolute -bottom-4 -right-4 h-48 w-48 opacity-20 transform -rotate-12">
+          <div className="absolute top-4 right-4 h-24 w-24 opacity-20 transform rotate-12 z-10">
             <Rocket className="h-full w-full" />
           </div>
         </div>

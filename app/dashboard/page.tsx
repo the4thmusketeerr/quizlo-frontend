@@ -7,6 +7,7 @@ import { AnimatedCard } from "@/components/custom/animated-card";
 import { QuizCard } from "@/components/dashboard/quiz-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { 
   Flame, 
   Zap, 
@@ -95,9 +96,9 @@ export default function DashboardPage() {
       <div className="mx-auto max-w-7xl space-y-8 pb-12">
         {/* Navigation Bar */}
         <div className="flex items-center justify-between">
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => router.back()}
             className="group h-10 rounded-full px-4 font-bold text-muted-foreground hover:bg-accent hover:text-purple-600 hover:shadow-sm"
           >
@@ -111,20 +112,29 @@ export default function DashboardPage() {
           <div className="relative z-10 flex flex-col items-center justify-between gap-6 lg:flex-row">
             <div className="flex flex-col items-center gap-6 md:flex-row">
               <div className="relative">
-                <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-white/20 bg-purple-100/10 shadow-inner">
-                  <img 
-                    src={profile.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.username}`} 
+                <Avatar className="h-24 w-24 border-4 border-white/20 bg-purple-100/10 shadow-inner">
+                  <AvatarImage
+                    src={profile.profilePicture}
                     alt={profile.username}
-                    className="h-full w-full object-cover"
+                    className="object-cover"
                   />
-                </div>
+                  <AvatarFallback className="bg-purple-600/50 text-2xl font-black text-white">
+                    {profile.firstName[0]?.toUpperCase()}
+                    {profile.lastName[0]?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+
                 <div className="absolute -bottom-2 right-0 rounded-xl bg-[#fcd34d] px-2.5 py-1 text-[10px] font-black text-black shadow-lg ring-2 ring-[#9333ea] whitespace-nowrap">
                   LVL {profile.level}
                 </div>
               </div>
               <div className="text-center md:text-left">
-                <h1 className="text-4xl font-black tracking-tight">{profile.username}</h1>
-                <p className="mt-1 text-sm font-semibold text-white/70 italic">{levelLabel}</p>
+                <h1 className="text-4xl font-black tracking-tight">
+                  {profile.username}
+                </h1>
+                <p className="mt-1 text-sm font-semibold text-white/70 italic">
+                  {levelLabel}
+                </p>
                 <div className="mt-3 flex flex-wrap justify-center gap-3 md:justify-start">
                   <div className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-bold backdrop-blur-md">
                     <Zap className="h-4 w-4 fill-[#fcd34d] text-[#fcd34d]" />
@@ -137,7 +147,9 @@ export default function DashboardPage() {
                   {tierName && (
                     <div
                       className="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-black backdrop-blur-md"
-                      style={{ backgroundColor: `${tierColor}30`, color: tierColor, border: `1.5px solid ${tierColor}60` }}
+                      style={{
+                        border: `1.5px solid`,
+                      }}
                     >
                       {tierName}
                     </div>
@@ -150,7 +162,7 @@ export default function DashboardPage() {
           <div className="absolute right-0 top-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
           <div className="absolute bottom-0 left-0 -ml-24 -mb-24 h-80 w-80 rounded-full bg-purple-400/20 blur-3xl"></div>
           <div className="absolute right-10 bottom-0 opacity-10">
-             <Trophy size={160} />
+            <Trophy size={160} />
           </div>
         </div>
 
@@ -160,15 +172,24 @@ export default function DashboardPage() {
             <AnimatedCard className="overflow-hidden rounded-[2.5rem] border-none p-8 shadow-sm ring-1 ring-border/50">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-xl font-black text-foreground">Level Progress</h3>
+                  <h3 className="text-xl font-black text-foreground">
+                    Level Progress
+                  </h3>
                   <div className="mt-1 flex items-center gap-2 flex-wrap">
                     <p className="text-sm font-medium text-muted-foreground">
-                      Level {profile.level} · <span className="text-foreground font-semibold">{levelLabel}</span>
+                      Level {profile.level} ·{" "}
+                      <span className="text-foreground font-semibold">
+                        {levelLabel}
+                      </span>
                     </p>
                     {tierName && (
                       <span
                         className="rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest"
-                        style={{ backgroundColor: `${tierColor}18`, color: tierColor, border: `1px solid ${tierColor}50` }}
+                        style={{
+                          backgroundColor: `${tierColor}18`,
+                          color: tierColor,
+                          border: `1px solid ${tierColor}50`,
+                        }}
                       >
                         {tierName}
                       </span>
@@ -179,16 +200,20 @@ export default function DashboardPage() {
                   {isMaxLevel ? "MAX" : `${Math.round(progressPercent)}%`}
                 </div>
               </div>
-              
+
               <div className="mt-8">
                 <div className="relative h-4 w-full overflow-hidden rounded-full bg-muted">
-                  <div 
+                  <div
                     className="h-full rounded-full bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 transition-all duration-1000 ease-out"
-                    style={{ width: isMaxLevel ? "100%" : `${progressPercent}%` }}
+                    style={{
+                      width: isMaxLevel ? "100%" : `${progressPercent}%`,
+                    }}
                   />
                   {isMaxLevel && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-[9px] font-black text-white tracking-widest uppercase">Max Level</span>
+                      <span className="text-[9px] font-black text-white tracking-widest uppercase">
+                        Max Level
+                      </span>
                     </div>
                   )}
                 </div>
@@ -196,7 +221,9 @@ export default function DashboardPage() {
                   <span>{xpIntoLevel} XP</span>
                   {!isMaxLevel && (
                     <span className="rounded-full bg-purple-500/10 dark:bg-purple-500/20 px-3 py-1 text-purple-600 dark:text-purple-400">
-                      {xpProgress ? `${xpProgress.xpToNextLevel} XP to Level ${profile.level + 1}` : ""}
+                      {xpProgress
+                        ? `${xpProgress.xpToNextLevel} XP to Level ${profile.level + 1}`
+                        : ""}
                     </span>
                   )}
                   <span>{isMaxLevel ? "∞" : `${xpTotal} XP`}</span>
@@ -207,55 +234,87 @@ export default function DashboardPage() {
             {/* Stats Summary Grid */}
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               <AnimatedCard className="flex flex-col items-center border-none p-6 text-center shadow-sm ring-1 ring-border/50 transition-all hover:shadow-md">
-                <p className="mt-4 text-2xl font-black text-foreground">{statistics.totalQuizzesPlayed || 0}</p>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Quizzes Played</p>
+                <p className="mt-4 text-2xl font-black text-foreground">
+                  {statistics.totalQuizzesPlayed || 0}
+                </p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+                  Quizzes Played
+                </p>
               </AnimatedCard>
 
               <AnimatedCard className="flex flex-col items-center border-none p-6 text-center shadow-sm ring-1 ring-border/50 transition-all hover:shadow-md">
-                <p className="mt-4 text-2xl font-black text-foreground">{statistics.totalQuizzesCreated || 0}</p>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Quizzes Created</p>
+                <p className="mt-4 text-2xl font-black text-foreground">
+                  {statistics.totalQuizzesCreated || 0}
+                </p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+                  Quizzes Created
+                </p>
               </AnimatedCard>
 
               <AnimatedCard className="flex flex-col items-center border-none p-6 text-center shadow-sm ring-1 ring-border/50 transition-all hover:shadow-md">
-                <p className="mt-4 text-2xl font-black text-foreground">{statistics.averageAccuracy.toFixed(0) || 0}%</p>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Avg Accuracy</p>
+                <p className="mt-4 text-2xl font-black text-foreground">
+                  {statistics.averageAccuracy.toFixed(0) || 0}%
+                </p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+                  Avg Accuracy
+                </p>
               </AnimatedCard>
 
               <AnimatedCard className="flex flex-col items-center border-none p-6 text-center shadow-sm ring-1 ring-border/50 transition-all hover:shadow-md">
-                <p className="mt-4 text-2xl font-black text-foreground">{statistics.totalXPEarned || 0}</p>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Total XP</p>
+                <p className="mt-4 text-2xl font-black text-foreground">
+                  {statistics.totalXPEarned || 0}
+                </p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+                  Total XP
+                </p>
               </AnimatedCard>
             </div>
 
             {/* Quizzes Created Section */}
             <div>
               <div className="flex items-center justify-between pb-6 px-2">
-                <h2 className="text-2xl font-black text-foreground">Quizzes Created</h2>
-                <Link href="/dashboard/quizzes" className="text-sm font-black text-purple-600 dark:text-purple-400 transition-colors hover:text-purple-700 dark:hover:text-purple-300">View All</Link>
+                <h2 className="text-2xl font-black text-foreground">
+                  Quizzes Created
+                </h2>
+                <Link
+                  href="/dashboard/quizzes"
+                  className="text-sm font-black text-purple-600 dark:text-purple-400 transition-colors hover:text-purple-700 dark:hover:text-purple-300"
+                >
+                  View All
+                </Link>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {myQuizzes.map((quiz) => (
-                  <QuizCard 
-                    key={quiz.id} 
+                  <QuizCard
+                    key={quiz.id}
                     id={quiz.id}
                     title={quiz.title}
                     description={quiz.description}
                     questionCount={quiz._count.questions}
-                    difficulty={quiz.difficulty as 'Easy' | 'Medium' | 'Hard'}
+                    difficulty={quiz.difficulty as "Easy" | "Medium" | "Hard"}
                     category={quiz.category.name}
                     plays={quiz.plays}
                     timeAllocated={quiz.timeAllocated}
                     isPrivate={quiz.isPrivate}
                     isDraft={quiz.isDraft}
                     creationMode={quiz.creationMode}
-                    updatedAt={formatDistanceToNow(new Date(quiz.updatedAt)) + " ago"}
+                    coverPicture={quiz.coverPicture}
+                    updatedAt={
+                      formatDistanceToNow(new Date(quiz.updatedAt)) + " ago"
+                    }
                   />
                 ))}
                 {myQuizzes.length === 0 && (
                   <div className="col-span-full flex flex-col items-center justify-center py-12 text-muted-foreground bg-card rounded-[2.5rem] ring-1 ring-border/50 shadow-sm">
                     <BookOpen size={48} className="mb-4 opacity-20" />
-                    <p className="font-bold">You haven't created any quizzes yet</p>
-                    <Button asChild variant="link" className="text-purple-600 dark:text-purple-400 font-bold mt-2">
+                    <p className="font-bold">
+                      You haven't created any quizzes yet
+                    </p>
+                    <Button
+                      asChild
+                      variant="link"
+                      className="text-purple-600 dark:text-purple-400 font-bold mt-2"
+                    >
                       <Link href="/create">Create your first quiz</Link>
                     </Button>
                   </div>
@@ -266,28 +325,49 @@ export default function DashboardPage() {
             {/* Recent Activity Section */}
             <div>
               <div className="flex items-center justify-between pb-6 px-2">
-                <h2 className="text-2xl font-black text-foreground">Recent Activity</h2>
-                <Link href="/dashboard/activity" className="text-sm font-black text-purple-600 dark:text-purple-400 transition-colors hover:text-purple-700 dark:hover:text-purple-300">View All</Link>
+                <h2 className="text-2xl font-black text-foreground">
+                  Recent Activity
+                </h2>
+                <Link
+                  href="/dashboard/activity"
+                  className="text-sm font-black text-purple-600 dark:text-purple-400 transition-colors hover:text-purple-700 dark:hover:text-purple-300"
+                >
+                  View All
+                </Link>
               </div>
               <div className="space-y-4">
                 {recentActivity.map((activity) => (
-                  <AnimatedCard key={activity.id} className="flex items-center justify-between border-none p-5 shadow-sm ring-1 ring-border/50 transition-all hover:shadow-md">
+                  <AnimatedCard
+                    key={activity.id}
+                    className="flex items-center justify-between border-none p-5 shadow-sm ring-1 ring-border/50 transition-all hover:shadow-md"
+                  >
                     <div className="flex items-center gap-5">
                       {/* <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-blue-500 shadow-lg shadow-blue-200 dark:shadow-blue-900/40">
                         <Layout className="h-6 w-6 text-white" />
                       </div> */}
                       <div className="min-w-0">
-                        <h4 className="truncate text-lg font-black text-foreground">{activity.quiz.title}</h4>
+                        <h4 className="truncate text-lg font-black text-foreground">
+                          {activity.quiz.title}
+                        </h4>
                         <div className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
                           <span className="text-blue-500">Medium</span>
                           <span>•</span>
-                          <span>{formatDistanceToNow(new Date(activity.completedAt))} ago</span>
+                          <span>
+                            {formatDistanceToNow(
+                              new Date(activity.completedAt),
+                            )}{" "}
+                            ago
+                          </span>
                         </div>
                       </div>
                     </div>
                     <div className="ml-4 text-right flex-shrink-0">
-                      <div className="text-2xl font-black text-green-500">{activity.accuracy.toFixed(0)}%</div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Accuracy</div>
+                      <div className="text-2xl font-black text-green-500">
+                        {activity.accuracy.toFixed(0)}%
+                      </div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                        Accuracy
+                      </div>
                     </div>
                   </AnimatedCard>
                 ))}
@@ -305,8 +385,13 @@ export default function DashboardPage() {
           <div className="space-y-8">
             {/* Quick Actions Sidebar */}
             <div className="space-y-4">
-              <h3 className="px-2 text-xl font-black text-foreground">Quick Actions</h3>
-              <Button asChild className="h-16 w-full justify-start rounded-[2.5rem] bg-[#9333ea] px-6 text-lg font-black shadow-xl shadow-purple-200/50 dark:shadow-purple-900/40 transition-all hover:scale-[1.02] hover:bg-purple-700 active:scale-[0.98]">
+              <h3 className="px-2 text-xl font-black text-foreground">
+                Quick Actions
+              </h3>
+              <Button
+                asChild
+                className="h-16 w-full justify-start rounded-[2.5rem] bg-[#9333ea] px-6 text-lg font-black shadow-xl shadow-purple-200/50 dark:shadow-purple-900/40 transition-all hover:scale-[1.02] hover:bg-purple-700 active:scale-[0.98]"
+              >
                 <Link href="/create">
                   <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/20">
                     <Plus className="h-6 w-6 text-white" />
@@ -314,7 +399,10 @@ export default function DashboardPage() {
                   Create a Quiz
                 </Link>
               </Button>
-              <Button asChild className="h-16 w-full justify-start rounded-[2.5rem] bg-[#fcd34d] px-6 text-lg font-black text-black shadow-xl shadow-yellow-200/50 dark:shadow-yellow-900/30 transition-all hover:scale-[1.02] hover:bg-yellow-400 active:scale-[0.98]">
+              <Button
+                asChild
+                className="h-16 w-full justify-start rounded-[2.5rem] bg-[#fcd34d] px-6 text-lg font-black text-black shadow-xl shadow-yellow-200/50 dark:shadow-yellow-900/30 transition-all hover:scale-[1.02] hover:bg-yellow-400 active:scale-[0.98]"
+              >
                 <Link href="/join">
                   <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-black/5">
                     <Users className="h-6 w-6" />
@@ -322,7 +410,11 @@ export default function DashboardPage() {
                   Join a Room
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="h-16 w-full justify-start rounded-[2.5rem] border-none bg-muted px-6 text-lg font-black text-foreground shadow-sm ring-1 ring-border/50 transition-all hover:bg-accent hover:text-foreground hover:scale-[1.02] active:scale-[0.98]">
+              <Button
+                asChild
+                variant="outline"
+                className="h-16 w-full justify-start rounded-[2.5rem] border-none bg-muted px-6 text-lg font-black text-foreground shadow-sm ring-1 ring-border/50 transition-all hover:bg-accent hover:text-foreground hover:scale-[1.02] active:scale-[0.98]"
+              >
                 <Link href="/explore">
                   <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-2xl">
                     <Search className="h-6 w-6 text-purple-600 dark:text-purple-400" />
@@ -335,48 +427,78 @@ export default function DashboardPage() {
             {/* Leaderboard Sidebar Card */}
             <AnimatedCard className="overflow-hidden rounded-[2.5rem] border-none p-8 shadow-sm ring-1 ring-border/50">
               <div className="flex items-center justify-between pb-8">
-                <h3 className="text-xl font-black text-foreground">Leaderboard</h3>
-                <Badge variant="secondary" className="bg-yellow-100 dark:bg-yellow-900/30 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-yellow-700 dark:text-yellow-400 ring-1 ring-yellow-200 dark:ring-yellow-800">
+                <h3 className="text-xl font-black text-foreground">
+                  Leaderboard
+                </h3>
+                <Badge
+                  variant="secondary"
+                  className="bg-yellow-100 dark:bg-yellow-900/30 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-yellow-700 dark:text-yellow-400 ring-1 ring-yellow-200 dark:ring-yellow-800"
+                >
                   PRO LEAGUE
                 </Badge>
               </div>
-              
+
               <div className="space-y-6">
                 {[
                   { rank: 1, name: "QuizMaster_99", xp: 3420, seed: "Felix" },
                   { rank: 2, name: "SaraBrainy", xp: 2980, seed: "Aneka" },
                 ].map((user) => (
-                  <div key={user.rank} className="group flex items-center justify-between">
+                  <div
+                    key={user.rank}
+                    className="group flex items-center justify-between"
+                  >
                     <div className="flex items-center gap-4">
-                      <span className="w-4 text-xs font-black text-muted-foreground/50">{user.rank}</span>
+                      <span className="w-4 text-xs font-black text-muted-foreground/50">
+                        {user.rank}
+                      </span>
                       <div className="h-11 w-11 overflow-hidden rounded-full ring-2 ring-border transition-all group-hover:ring-purple-300 shadow-sm">
-                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.seed}`} alt={user.name} className="h-full w-full object-cover" />
+                        <img
+                          src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.seed}`}
+                          alt={user.name}
+                          className="h-full w-full object-cover"
+                        />
                       </div>
-                      <span className="text-sm font-bold text-foreground">{user.name}</span>
+                      <span className="text-sm font-bold text-foreground">
+                        {user.name}
+                      </span>
                     </div>
-                    <span className="text-sm font-black text-purple-600 dark:text-purple-400">{user.xp} XP</span>
+                    <span className="text-sm font-black text-purple-600 dark:text-purple-400">
+                      {user.xp} XP
+                    </span>
                   </div>
                 ))}
-                
+
                 {/* Current User Row */}
                 <div className="flex items-center justify-between rounded-[1.5rem] bg-purple-500/10 dark:bg-purple-500/20 p-3 ring-1 ring-purple-200 dark:ring-purple-800">
                   <div className="flex items-center gap-3">
-                    <span className="w-4 text-xs font-black text-purple-400">3</span>
+                    <span className="w-4 text-xs font-black text-purple-400">
+                      3
+                    </span>
                     <div className="h-11 w-11 overflow-hidden rounded-full ring-4 ring-background shadow-md">
-                      <img 
-                        src={profile.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.username}`} 
-                        alt="You" 
+                      <img
+                        src={
+                          profile.profilePicture ||
+                          `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.username}`
+                        }
+                        alt="You"
                         className="h-full w-full object-cover"
                       />
                     </div>
-                    <span className="text-sm font-black text-foreground underline decoration-purple-400 decoration-2 underline-offset-4">You</span>
+                    <span className="text-sm font-black text-foreground underline decoration-purple-400 decoration-2 underline-offset-4">
+                      You
+                    </span>
                   </div>
-                  <span className="text-sm font-black text-purple-600 dark:text-purple-400">{profile.xp} XP</span>
+                  <span className="text-sm font-black text-purple-600 dark:text-purple-400">
+                    {profile.xp} XP
+                  </span>
                 </div>
               </div>
 
               <div className="mt-10 text-center">
-                <Link href="/leaderboard" className="text-sm font-black text-muted-foreground transition-colors hover:text-foreground">
+                <Link
+                  href="/leaderboard"
+                  className="text-sm font-black text-muted-foreground transition-colors hover:text-foreground"
+                >
                   See full rankings
                 </Link>
               </div>

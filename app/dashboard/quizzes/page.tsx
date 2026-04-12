@@ -309,6 +309,7 @@ export default function MyQuizzesPage() {
                   isPrivate={quiz.isPrivate}
                   isDraft={quiz.isDraft}
                   creationMode={quiz.creationMode}
+                  coverPicture={quiz.coverPicture}
                   updatedAt={formatDistanceToNow(new Date(quiz.updatedAt)) + " ago"}
                   createdAt={formatDistanceToNow(new Date(quiz.createdAt)) + " ago"}
                   viewMode={viewMode}

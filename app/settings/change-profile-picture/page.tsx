@@ -8,15 +8,17 @@ import {
   RefreshCw,
   Check,
   Loader2,
+  Trash2,
   Plus,
   Image as ImageIcon,
   Pencil,
+  Camera,
   HelpCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAppStore } from "@/store/useAppStore";
-import { uploadProfilePicture, type ProfileData } from "@/lib/user";
+import { uploadProfilePicture, deleteProfilePicture, type ProfileData } from "@/lib/user";
 import { goeyToast } from "@/components/ui/goey-toaster";
 import { cn } from "@/lib/utils";
 import { createAvatar } from "@dicebear/core";
@@ -28,14 +30,18 @@ export default function ChangeProfilePicturePage() {
   const { profile, setProfile } = useAppStore();
 
   const [isUploading, setIsUploading] = useState(false);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [isPendingDelete, setIsPendingDelete] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(
     profile?.profilePicture || null,
   );
   const [dragActive, setDragActive] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [activeTab, setActiveTab] = useState<"photo" | "avatar">("photo");
   const [activeMode, setActiveMode] = useState<"upload" | "presets" | "custom">(
     "upload",
   );
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   // DiceBear State
   const [avatarOptions, setAvatarOptions] = useState<any>({
@@ -68,6 +74,7 @@ export default function ChangeProfilePicturePage() {
   useEffect(() => {
     if (activeMode === "custom") {
       setSelectedAvatar(customAvatarUri);
+      setIsPendingDelete(false);
     }
   }, [customAvatarUri, activeMode]);
 
@@ -85,24 +92,73 @@ export default function ChangeProfilePicturePage() {
     "https://api.dicebear.com/7.x/avataaars/svg?seed=Ruby",
   ]);
 
-  const handleFile = async (file: File) => {
+  const handleFile = (file: File) => {
     if (!file) return;
 
+    setPendingFile(file);
+    setIsPendingDelete(false);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setSelectedAvatar(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDelete = () => {
+    setIsPendingDelete(true);
+    setPendingFile(null);
+    setSelectedAvatar(null);
+  };
+
+  const handleSave = async () => {
     setIsUploading(true);
     try {
-      const response = await uploadProfilePicture(file);
-      if (response.success && response.data?.profilePicture) {
-        const updatedProfile = {
-          ...(profile as ProfileData),
-          profilePicture: response.data.profilePicture,
-        };
-        setProfile(updatedProfile);
-        setSelectedAvatar(response.data.profilePicture);
-        goeyToast.success("Profile picture updated!");
+      let updatedProfile = { ...(profile as ProfileData) };
+      let hasChanged = false;
+
+      // 1. Handle Deletion
+      if (isPendingDelete) {
+        const response = await deleteProfilePicture();
+        if (response.success) {
+          updatedProfile.profilePicture = undefined;
+          hasChanged = true;
+        }
+      } 
+      // 2. Handle New Picture (Upload, Custom, or Preset)
+      else {
+        let fileToUpload: File | null = null;
+
+        if (activeMode === "upload" && pendingFile) {
+          fileToUpload = pendingFile;
+        } else if (activeMode === "custom") {
+          const blob = new Blob([customAvatarSvg], { type: "image/svg+xml" });
+          fileToUpload = new File([blob], "avatar.svg", { type: "image/svg+xml" });
+        } else if (activeMode === "presets" && selectedAvatar && selectedAvatar !== profile?.profilePicture) {
+          // Fetch the preset and convert to file
+          const response = await fetch(selectedAvatar);
+          const blob = await response.blob();
+          fileToUpload = new File([blob], "avatar.svg", { type: "image/svg+xml" });
+        }
+
+        if (fileToUpload) {
+          const response = await uploadProfilePicture(fileToUpload);
+          if (response.success && response.data?.profilePicture) {
+            updatedProfile.profilePicture = response.data.profilePicture;
+            hasChanged = true;
+          }
+        }
       }
+
+      if (hasChanged) {
+        setProfile(updatedProfile);
+        goeyToast.success("Profile updated successfully!");
+      }
+      
+      router.back();
     } catch (error) {
       goeyToast.error(
-        error instanceof Error ? error.message : "Failed to upload photo",
+        error instanceof Error ? error.message : "Failed to save changes",
       );
     } finally {
       setIsUploading(false);
@@ -128,16 +184,7 @@ export default function ChangeProfilePicturePage() {
     }
   };
 
-  const saveCustomAvatar = async () => {
-    try {
-      const blob = new Blob([customAvatarSvg], { type: "image/svg+xml" });
-      const file = new File([blob], "avatar.svg", { type: "image/svg+xml" });
-      await handleFile(file);
-      router.back();
-    } catch (error) {
-      console.error("Error saving custom avatar:", error);
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-[#F8F9FE] dark:bg-background pb-12 cursor-default">
@@ -162,10 +209,10 @@ export default function ChangeProfilePicturePage() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 bg-[#F5F3FF] dark:bg-purple-900/20 px-3 py-1.5 rounded-full select-none">
+          {/* <div className="flex items-center gap-1.5 bg-[#F5F3FF] dark:bg-purple-900/20 px-3 py-1.5 rounded-full select-none">
             <HelpCircle className="h-3.5 w-3.5 text-[#A855F7]" />
             <span className="text-[11px] font-bold text-[#A855F7]">Quizlo</span>
-          </div>
+          </div> */}
         </div>
 
         {/* PROFILE PREVIEW */}
@@ -174,9 +221,18 @@ export default function ChangeProfilePicturePage() {
             <Avatar className="h-28 w-28 md:h-32 md:w-32 border-[6px] border-white dark:border-card shadow-2xl ring-1 ring-slate-100 dark:ring-border/50">
               <AvatarImage src={selectedAvatar || ""} />
               <AvatarFallback className="bg-[#A855F7] text-white text-3xl font-bold">
-                {profile?.username?.[0]?.toUpperCase() || "U"}
+                {profile?.firstName?.[0]?.toUpperCase() + profile?.lastName?.[0]?.toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
+            {selectedAvatar && (
+              <button
+                onClick={handleDelete}
+                className="absolute -top-1 -right-1 h-9 w-9 rounded-full bg-destructive border-[3px] border-white dark:border-card flex items-center justify-center shadow-lg cursor-pointer transform hover:scale-110 transition-all z-10"
+                title="Delete profile picture"
+              >
+                <Trash2 className="h-4 w-4 text-white" />
+              </button>
+            )}
             {/* <div className="absolute bottom-1 right-1 h-8 w-8 rounded-full bg-[#A855F7] border-[3px] border-white dark:border-card flex items-center justify-center shadow-lg cursor-pointer transform hover:scale-110 transition-all">
               <Pencil className="h-4 w-4 text-white" />
             </div> */}
@@ -190,21 +246,50 @@ export default function ChangeProfilePicturePage() {
 
         {/* NAVIGATION TABS */}
         <div className="flex bg-white dark:bg-card p-1.5 rounded-[24px] shadow-sm border border-border/50 max-w-md mx-auto">
-          {(["upload", "presets", "custom"] as const).map((mode) => (
+          {[
+            { id: "photo", label: "Upload Photo", mode: "upload" },
+            { id: "avatar", label: "Avatar Studio", mode: "presets" },
+          ].map((tab) => (
             <button
-              key={mode}
-              onClick={() => setActiveMode(mode)}
+              key={tab.id}
+              onClick={() => {
+                setActiveTab(tab.id as "photo" | "avatar");
+                setActiveMode(tab.mode as any);
+              }}
               className={cn(
-                "flex-1 py-3 px-4 rounded-[18px] text-sm font-bold capitalize transition-all",
-                activeMode === mode
+                "flex-1 py-3 px-4 rounded-[18px] text-sm font-bold transition-all",
+                activeTab === tab.id
                   ? "bg-[#F5F3FF] text-[#A855F7] dark:bg-purple-900/20 shadow-sm"
                   : "text-muted-foreground hover:bg-slate-50 dark:hover:bg-secondary/20",
               )}
             >
-              {mode}
+              {tab.label}
             </button>
           ))}
         </div>
+
+        {/* SUB-NAVIGATION FOR AVATARS */}
+        {activeTab === "avatar" && (
+          <div className="flex justify-center gap-4 animate-in fade-in zoom-in-95 duration-300">
+            {[
+              { id: "presets", label: "Explore" },
+              { id: "custom", label: "Create" },
+            ].map((sub) => (
+              <button
+                key={sub.id}
+                onClick={() => setActiveMode(sub.id as any)}
+                className={cn(
+                  "px-6 py-2 rounded-full text-[13px] font-bold transition-all border",
+                  activeMode === sub.id
+                    ? "bg-[#A855F7] text-white border-[#A855F7] shadow-md"
+                    : "bg-white dark:bg-card text-muted-foreground border-border/50 hover:border-[#A855F7]/30",
+                )}
+              >
+                {sub.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* CONTENT SECTIONS */}
         {activeMode === "upload" && (
@@ -224,32 +309,56 @@ export default function ChangeProfilePicturePage() {
               onDragOver={handleDrag}
               onDrop={handleDrop}
             >
-              <div className="h-14 w-14 rounded-2xl bg-[#F5F3FF] dark:bg-purple-900/20 flex items-center justify-center mb-5 shadow-sm">
+              {/* <div className="h-14 w-14 rounded-2xl bg-[#F5F3FF] dark:bg-purple-900/20 flex items-center justify-center mb-5 shadow-sm">
                 <Upload className="h-7 w-7 text-[#A855F7]" />
-              </div>
+              </div> */}
               <p className="text-base font-bold text-[#1F2937] dark:text-foreground">
-                Drag and drop your photo here
+                Upload your photo here
               </p>
               <p className="text-[12px] font-medium text-muted-foreground mt-2">
                 Supported: JPG, PNG • Max size 5MB
               </p>
 
-              <Button
-                onClick={() => fileInputRef.current?.click()}
-                className="mt-8 h-11 rounded-full bg-white dark:bg-secondary hover:bg-slate-50 dark:hover:bg-secondary/80 text-[#374151] dark:text-foreground font-bold text-sm px-8 shadow-sm border border-slate-100 dark:border-none"
-              >
-                Upload from device
-              </Button>
+            <div className="flex flex-col items-center justify-center mt-8 space-y-4">
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                <Button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="h-11 rounded-full bg-white dark:bg-secondary hover:bg-slate-50 dark:hover:bg-secondary/80 text-[#374151] dark:text-foreground font-bold text-sm px-8 shadow-sm border border-slate-100 dark:border-none"
+                >
+                  <ImageIcon className="h-4 w-4 mr-2 text-[#A855F7]" />
+                  Open Gallery
+                </Button>
 
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  e.target.files?.[0] && handleFile(e.target.files[0])
-                }
-                className="hidden"
-              />
+                <Button
+                  onClick={() => cameraInputRef.current?.click()}
+                  className="h-11 rounded-full bg-white dark:bg-secondary hover:bg-slate-50 dark:hover:bg-secondary/80 text-[#374151] dark:text-foreground font-bold text-sm px-8 shadow-sm border border-slate-100 dark:border-none"
+                >
+                  <Camera className="h-4 w-4 mr-2 text-[#A855F7]" />
+                  Take Photo
+                </Button>
+              </div>
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={(e) =>
+                e.target.files?.[0] && handleFile(e.target.files[0])
+              }
+              className="hidden"
+            />
+
+            <input
+              ref={cameraInputRef}
+              type="file"
+              accept="image/*"
+              capture="user"
+              onChange={(e) =>
+                e.target.files?.[0] && handleFile(e.target.files[0])
+              }
+              className="hidden"
+            />
 
               {isUploading && (
                 <div className="absolute inset-0 bg-white/80 dark:bg-card/80 rounded-[32px] flex flex-col items-center justify-center backdrop-blur-[2px] z-10">
@@ -285,7 +394,11 @@ export default function ChangeProfilePicturePage() {
               {generatedAvatars.map((url, index) => (
                 <div
                   key={index}
-                  onClick={() => setSelectedAvatar(url)}
+                  onClick={() => {
+                    setSelectedAvatar(url);
+                    setIsPendingDelete(false);
+                    setPendingFile(null);
+                  }}
                   className={cn(
                     "relative aspect-square rounded-full cursor-pointer transition-all duration-300 transform hover:scale-105",
                     selectedAvatar === url
@@ -457,21 +570,16 @@ export default function ChangeProfilePicturePage() {
           </Button>
           <Button
             disabled={isUploading}
-            onClick={() => {
-              if (activeMode === "custom") {
-                saveCustomAvatar();
-              } else if (selectedAvatar !== profile?.profilePicture) {
-                goeyToast.success("New avatar selected!");
-                router.back();
-              } else {
-                router.back();
-              }
-            }}
+            onClick={handleSave}
             className="flex-1 h-14 rounded-[22px] bg-[#B066FF] hover:bg-[#9333EA] text-white font-bold text-base shadow-xl shadow-purple-100 dark:shadow-none transition-all hover:scale-[1.05] active:scale-[0.98]"
           >
             <div className="flex items-center gap-2">
-              <Check className="h-5 w-5" />
-              Save Profile Picture
+              {isUploading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <Check className="h-5 w-5" />
+              )}
+              {isUploading ? "Saving..." : "Save Profile Picture"}
             </div>
           </Button>
         </div>

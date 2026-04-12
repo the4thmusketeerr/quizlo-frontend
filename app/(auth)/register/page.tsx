@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { GradientButton } from "@/components/custom/gradient-button";
 import { AnimatedCard } from "@/components/custom/animated-card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Zap, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { Zap, Eye, EyeOff } from "lucide-react";
 import { signup, storeToken } from "@/lib/auth";
 
 export default function RegisterPage() {
@@ -124,213 +124,201 @@ export default function RegisterPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <Link
-          href="/"
-          className="mb-6 inline-flex items-center gap-2 text-muted-foreground transition-smooth hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to home
-        </Link>
-        <div className="mb-4 flex justify-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
-            <Zap className="h-8 w-8 text-white" />
-          </div>
-        </div>
-        <h1 className="text-2xl font-bold text-foreground">Create Account</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Join thousands of learners on QuizMind
+
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          Create Account
+        </h1>
+        <p className="mt-2 text-muted-foreground">
+          Join thousands of learners on Quizlo
         </p>
       </div>
 
-      {/* Form Card */}
-      <AnimatedCard hover="glow">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* First Name and Last Name on same row */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input
-                id="firstName"
-                type="text"
-                placeholder="John"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-                className="bg-card/50 border-border/50"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                id="lastName"
-                type="text"
-                placeholder="Doe"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-                className="bg-card/50 border-border/50"
-              />
-            </div>
-          </div>
-
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* First Name and Last Name on same row */}
+        <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor="firstName">First Name</Label>
             <Input
-              id="username"
+              id="firstName"
               type="text"
-              placeholder="johndoe"
-              name="username"
-              value={formData.username}
+              placeholder="John"
+              name="firstName"
+              value={formData.firstName}
               onChange={handleChange}
               required
-              className="bg-card/50 border-border/50"
+              className="h-11 bg-muted/50 border-border/50 focus:border-[#A855F7] focus:ring-[#A855F7]/20"
             />
           </div>
-
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="lastName">Last Name</Label>
             <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              name="email"
-              value={formData.email}
+              id="lastName"
+              type="text"
+              placeholder="Doe"
+              name="lastName"
+              value={formData.lastName}
               onChange={handleChange}
               required
-              className="bg-card/50 border-border/50"
+              className="h-11 bg-muted/50 border-border/50 focus:border-[#A855F7] focus:ring-[#A855F7]/20"
             />
           </div>
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                className="bg-card/50 border-border/50 pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </button>
-            </div>
-            {/* Password Strength Indicator */}
-            {passwordStrengthValue && (
-              <div className="mt-2 space-y-2">
-                <div className="flex gap-1">
-                  {[0, 1, 2, 3].map((index) => (
-                    <div
-                      key={index}
-                      className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                        index <= passwordStrengthValue.id
-                          ? passwordStrengthValue.id === 0
-                            ? "bg-red-500"
-                            : passwordStrengthValue.id === 1
-                              ? "bg-orange-500"
-                              : passwordStrengthValue.id === 2
-                                ? "bg-yellow-500"
-                                : "bg-green-500"
-                          : "bg-border/50"
-                      }`}
-                    />
-                  ))}
-                </div>
-                <p
-                  className={`text-xs font-medium transition-colors ${
-                    passwordStrengthValue.id === 0
-                      ? "text-red-500"
-                      : passwordStrengthValue.id === 1
-                        ? "text-orange-500"
-                        : passwordStrengthValue.id === 2
-                          ? "text-yellow-500"
-                          : "text-green-500"
-                  }`}
-                >
-                  Password strength: {passwordStrengthValue.value}
-                </p>
-              </div>
-            )}
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="username">Username</Label>
+          <Input
+            id="username"
+            type="text"
+            placeholder="johndoe"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+            className="h-11 bg-muted/50 border-border/50 focus:border-[#A855F7] focus:ring-[#A855F7]/20"
+          />
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <div className="relative">
-              <Input
-                id="confirmPassword"
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="••••••••"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-                className="bg-card/50 border-border/50 pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={
-                  showConfirmPassword ? "Hide password" : "Show password"
-                }
-              >
-                {showConfirmPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </button>
-            </div>
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="h-11 bg-muted/50 border-border/50 focus:border-[#A855F7] focus:ring-[#A855F7]/20"
+          />
+        </div>
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="terms"
-              name="agreeToTerms"
-              checked={formData.agreeToTerms}
-              onCheckedChange={(checked) =>
-                setFormData({ ...formData, agreeToTerms: checked as boolean })
-              }
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="h-11 bg-muted/50 border-border/50 pr-10 focus:border-[#A855F7] focus:ring-[#A855F7]/20"
             />
-            <label
-              htmlFor="terms"
-              className="text-sm text-muted-foreground cursor-pointer"
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              I agree to the{" "}
-              <Link href="#" className="text-primary hover:text-accent">
-                Terms
-              </Link>{" "}
-              and{" "}
-              <Link href="#" className="text-primary hover:text-accent">
-                Privacy Policy
-              </Link>
-            </label>
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
           </div>
+          {/* Password Strength Indicator */}
+          {passwordStrengthValue && (
+            <div className="mt-2 space-y-2">
+              <div className="flex gap-1">
+                {[0, 1, 2, 3].map((index) => (
+                  <div
+                    key={index}
+                    className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                      index <= passwordStrengthValue.id
+                        ? passwordStrengthValue.id === 0
+                          ? "bg-red-500"
+                          : passwordStrengthValue.id === 1
+                            ? "bg-orange-500"
+                            : passwordStrengthValue.id === 2
+                              ? "bg-yellow-500"
+                              : "bg-green-500"
+                        : "bg-border/50"
+                    }`}
+                  />
+                ))}
+              </div>
+              <p
+                className={`text-[10px] font-medium transition-colors ${
+                  passwordStrengthValue.id === 0
+                    ? "text-red-500"
+                    : passwordStrengthValue.id === 1
+                      ? "text-orange-500"
+                      : passwordStrengthValue.id === 2
+                        ? "text-yellow-500"
+                        : "text-green-500"
+                }`}
+              >
+                Strength: {passwordStrengthValue.value}
+              </p>
+            </div>
+          )}
+        </div>
 
-          <GradientButton
-            type="submit"
-            disabled={loading}
-            className="w-full"
-            size="md"
+        <div className="space-y-2">
+          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <div className="relative">
+            <Input
+              id="confirmPassword"
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="••••••••"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+              className="h-11 bg-muted/50 border-border/50 pr-10 focus:border-[#A855F7] focus:ring-[#A855F7]/20"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label={
+                showConfirmPassword ? "Hide password" : "Show password"
+              }
+            >
+              {showConfirmPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* <div className="flex items-center space-x-2 py-1">
+          <Checkbox
+            id="terms"
+            name="agreeToTerms"
+            checked={formData.agreeToTerms}
+            onCheckedChange={(checked) =>
+              setFormData({ ...formData, agreeToTerms: checked as boolean })
+            }
+          />
+          <label
+            htmlFor="terms"
+            className="text-xs text-muted-foreground cursor-pointer"
           >
-            {loading ? "Creating account..." : "Create Account"}
-          </GradientButton>
-        </form>
-      </AnimatedCard>
+            I agree to the{" "}
+            <Link href="#" className="font-semibold text-[#A855F7] hover:underline">
+              Terms
+            </Link>{" "}
+            and{" "}
+            <Link href="#" className="font-semibold text-[#A855F7] hover:underline">
+              Privacy Policy
+            </Link>
+          </label>
+        </div> */}
+
+        <Button
+          type="submit"
+          disabled={loading}
+          className="h-12 w-full bg-gradient-to-r from-[#A855F7] to-indigo-600 text-lg font-bold text-white shadow-lg shadow-purple-500/25 transition-smooth hover:scale-[1.02] hover:shadow-purple-500/40 active:scale-[0.98]"
+        >
+          {loading ? "Creating account..." : "Create Account"}
+        </Button>
+      </form>
+
 
       {/* Divider */}
       <div className="relative">

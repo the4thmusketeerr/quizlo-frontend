@@ -63,6 +63,7 @@ export interface Quiz {
   creatorId: string;
   createdAt: string;
   updatedAt: string;
+  coverPicture?: string;
   category: {
     name: string;
   };
@@ -89,6 +90,9 @@ export interface XpProgress {
 export interface DashboardData {
   profile: {
     username: string;
+    firstName: string;
+    lastName: string;
+    email: string;
     xp: number;
     level: number;
     streak: number;
