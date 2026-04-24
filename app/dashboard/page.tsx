@@ -118,9 +118,8 @@ export default function DashboardPage() {
                     alt={profile.username}
                     className="object-cover"
                   />
-                  <AvatarFallback className="bg-purple-600/50 text-2xl font-black text-white">
-                    {profile.firstName[0]?.toUpperCase()}
-                    {profile.lastName[0]?.toUpperCase()}
+                  <AvatarFallback className="bg-muted">
+                    <img src="https://placehold.net/avatar.svg" alt="Avatar" className="h-full w-full object-cover" />
                   </AvatarFallback>
                 </Avatar>
 

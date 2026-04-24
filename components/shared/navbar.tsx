@@ -118,10 +118,7 @@ export function AppNavbar() {
                     className="h-8 w-8 rounded-full object-cover"
                   />
                 ) : (
-                  <span>
-                    {profileData.firstName.charAt(0).toUpperCase() +
-                      profileData.lastName.charAt(0).toUpperCase()}
-                  </span>
+                   <img src="https://placehold.net/avatar.svg" alt="Avatar" className="h-full w-full object-cover" />
                 )}
               </div>
               <ChevronDown
@@ -150,10 +147,7 @@ export function AppNavbar() {
                           className="h-9 w-9 rounded-full object-cover"
                         />
                       ) : (
-                        <span className="select-none">
-                          {profileData.firstName.charAt(0).toUpperCase() +
-                            profileData.lastName.charAt(0).toUpperCase()}
-                        </span>
+                        <img src="https://placehold.net/avatar.svg" alt="Avatar" className="h-full w-full object-cover" />
                       )}
                     </div>
                     <div className="min-w-0">

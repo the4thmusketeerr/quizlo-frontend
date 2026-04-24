@@ -49,6 +49,10 @@ export default function UpdateEmailPage() {
     }
   };
 
+  
+  
+
+
   return (
     <div className="min-h-screen bg-[#F8F9FE] dark:bg-background pb-12 cursor-default">
       <div className="max-w-[540px] mx-auto px-4 pt-8 space-y-8">

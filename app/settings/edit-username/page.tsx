@@ -6,7 +6,7 @@ import { ChevronLeft, User, Check, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppStore } from "@/store/useAppStore";
-import { updateUsername as updateUsernameApi } from "@/lib/user";
+import { changeUsername } from "@/lib/user";
 import { goeyToast } from "@/components/ui/goey-toaster";
 
 export default function EditUsernamePage() {
@@ -29,12 +29,12 @@ export default function EditUsernamePage() {
     setIsValid(usernameRegex.test(val));
   };
 
-  const handleSave = async () => {
+  const handleUsernameChange = async () => {
     if (!newUsername || !isValid || newUsername === profile?.username) return;
     
     setIsSaving(true);
     try {
-      const response = await updateUsernameApi(newUsername);
+      const response = await changeUsername(newUsername);
       if (response.success && response.data) {
         setProfile(response.data);
         goeyToast.success("Username updated successfully!");
@@ -46,7 +46,6 @@ export default function EditUsernamePage() {
       setIsSaving(false);
     }
   };
-
   const getInitials = (username: string) => {
     if (!username) return "U";
     return username.substring(0, 2).toUpperCase();
@@ -84,9 +83,9 @@ export default function EditUsernamePage() {
                 {profile?.username || "Loading..."}
               </p>
             </div>
-            <div className="h-12 w-12 rounded-full bg-[#F5F3FF] dark:bg-purple-900/20 flex items-center justify-center">
+            {/* <div className="h-12 w-12 rounded-full bg-[#F5F3FF] dark:bg-purple-900/20 flex items-center justify-center">
               <User className="h-6 w-6 text-[#A855F7]" />
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -167,7 +166,7 @@ export default function EditUsernamePage() {
           </Button>
           <Button 
             disabled={!isValid || newUsername.length < 3 || isSaving || newUsername === profile?.username}
-            onClick={handleSave}
+            onClick={handleUsernameChange}
             className="flex-1 h-16 rounded-[20px] bg-[#A855F7] hover:bg-[#9333EA] text-white font-bold text-base shadow-xl shadow-purple-100 dark:shadow-none transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
           >
             {isSaving ? (

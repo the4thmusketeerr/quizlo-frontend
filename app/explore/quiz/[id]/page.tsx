@@ -7,7 +7,6 @@ import {
   ArrowLeft, 
   Share2, 
   Bookmark, 
-  Rocket, 
   HelpCircle, 
   Clock, 
   Trophy, 
@@ -24,6 +23,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
+
+const difficultyColors: Record<string, string> = {
+  Easy: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400",
+  Medium:
+    "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400",
+  Hard: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400",
+};
 
 export default function QuizOverviewPage() {
   const params = useParams();
@@ -123,76 +129,114 @@ export default function QuizOverviewPage() {
       </header> */}
 
       <main className="mx-auto max-w-2xl px-4 pt-24">
-        {/* ── Header Card ── */}
-        <div className="relative overflow-hidden rounded-[2.5rem] p-8 text-white shadow-xl min-h-[220px] flex flex-col justify-end">
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0">
-            <img
-              src={quiz.coverPicture || "https://placehold.net/600x600.png"}
-              alt={quiz.title}
-              className="h-full w-full object-cover"
-            />
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#7B2CBF] via-[#9D4EDD]/70 to-transparent" />
-          </div>
-
-          <div className="relative z-10 flex flex-col gap-3">
-            <div className="flex gap-2">
-              <Badge variant="secondary" className="bg-white/20 text-[10px] font-bold uppercase tracking-wider text-white border-none px-3 py-1 backdrop-blur-md">
-                {quiz.category?.name || "General"}
-              </Badge>
-              <Badge variant="secondary" className="bg-white/20 text-[10px] font-bold uppercase tracking-wider text-white border-none px-3 py-1 backdrop-blur-md">
-                {quiz.difficulty}
-              </Badge>
-            </div>
-            <h2 className="text-3xl font-extrabold leading-tight">
-              {quiz.title}
-            </h2>
-            <p className="text-sm font-medium text-white/90 line-clamp-2">
-              {quiz.description}
-            </p>
-          </div>
-          
-          {/* Rocket Icon Container */}
-          <div className="absolute top-4 right-4 h-24 w-24 opacity-20 transform rotate-12 z-10">
-            <Rocket className="h-full w-full" />
-          </div>
+        {/* ── Badges — OUTSIDE the image card, above it ── */}
+        <div className="flex items-center gap-2 mb-4 px-1">
+          <Badge
+            variant="secondary"
+            className="rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-none px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider"
+          >
+            {quiz.category?.name || "General"}
+          </Badge>
+          <Badge
+            variant="secondary"
+            className={`rounded-full border-none px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider ${
+              difficultyColors[quiz.difficulty] || difficultyColors.Medium
+            }`}
+          >
+            {quiz.difficulty}
+          </Badge>
         </div>
 
-        {/* ── Stats Section ── */}
-        <div className="mt-8 grid grid-cols-4 gap-2 px-1">
-          <div className="flex flex-col items-center justify-center rounded-3xl border border-border/50 bg-card/50 py-5 transition-transform hover:scale-105">
-            <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600">
-              <HelpCircle className="h-5 w-5" />
-            </div>
-            <span className="text-sm font-black text-foreground">{quiz._count?.questions || 0}</span>
-            <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Questions</span>
-          </div>
-          
-          <div className="flex flex-col items-center justify-center rounded-3xl border border-border/50 bg-card/50 py-5 transition-transform hover:scale-105">
-            <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600">
-              <Clock className="h-5 w-5" />
-            </div>
-            <span className="text-sm font-black text-foreground">{minutes} min</span>
-            <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Duration</span>
-          </div>
+        {/* ── Cover Image Card — pure image, no text inside ── */}
+        <div className="relative overflow-hidden rounded-[2.5rem] shadow-xl min-h-[260px]">
+          <img
+            src={quiz.coverPicture || "https://placehold.net/600x600.png"}
+            alt={quiz.title}
+            className="h-full w-full object-cover min-h-[260px]"
+          />
+        </div>
 
-          <div className="flex flex-col items-center justify-center rounded-3xl border border-border/50 bg-card/50 py-5 transition-transform hover:scale-105">
-            <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600">
-              <Star className="h-5 w-5" />
-            </div>
-            <span className="text-sm font-black text-foreground">{quiz.rating}/5</span>
-            <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Rating</span>
-          </div>
+        {/* ── Title & Description — OUTSIDE the image card, below it ── */}
+        <div className="mt-6 px-1">
+          <h1 className="text-2xl font-extrabold leading-tight text-foreground tracking-tight">
+            {quiz.title}
+          </h1>
+          <p className="mt-2 text-sm font-medium text-muted-foreground leading-relaxed">
+            {quiz.description}
+          </p>
+        </div>
 
-          <div className="flex flex-col items-center justify-center rounded-3xl border border-border/50 bg-card/50 py-5 transition-transform hover:scale-105">
-            <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600">
-              <PlayCircle className="h-5 w-5" />
-            </div>
-            <span className="text-sm font-black text-foreground">
-              {quiz.plays >= 1000 ? `${(quiz.plays / 1000).toFixed(1)}K` : quiz.plays}
+        {/* ── Creator Inline ── */}
+        {quiz.creator && (
+          <div className="mt-5 px-1 flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Created by</span>
+            <Avatar className="h-6 w-6 border border-border">
+              {quiz.creator.profilePicture ? (
+                <AvatarImage
+                  src={quiz.creator.profilePicture}
+                  alt={quiz.creator.username}
+                />
+              ) : null}
+              <AvatarFallback className="bg-muted">
+                <img src="https://placehold.net/avatar.svg" alt="Avatar" className="h-full w-full object-cover" />
+              </AvatarFallback>
+            </Avatar>
+            <span className="font-semibold text-foreground">
+              {quiz.creator.username}
             </span>
-            <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Plays</span>
+          </div>
+        )}
+
+        {/* ── Stats Section — OUTSIDE the image card ── */}
+        <div className="mt-6 grid grid-cols-4 gap-2 px-1">
+          <div className="flex flex-col items-center justify-center rounded-3xl border border-border/50 bg-card/50 py-5 transition-transform hover:scale-105">
+            {/* <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600">
+              <HelpCircle className="h-5 w-5" />
+            </div> */}
+            <span className="text-sm font-black text-foreground">
+              {quiz._count?.questions || 0}
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">
+              Questions
+            </span>
+          </div>
+
+          <div className="flex flex-col items-center justify-center rounded-3xl border border-border/50 bg-card/50 py-5 transition-transform hover:scale-105">
+            {/* <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600">
+              <Clock className="h-5 w-5" />
+            </div> */}
+            <span className="text-sm font-black text-foreground">
+              {minutes} MIN
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">
+              Duration
+            </span>
+          </div>
+
+          <div className="flex flex-col items-center justify-center rounded-3xl border border-border/50 bg-card/50 py-5 transition-transform hover:scale-105">
+            {/* <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600">
+              <Star className="h-5 w-5" />
+            </div> */}
+            <span className="text-sm font-black text-foreground">
+              {quiz.rating}/5
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">
+              Rating
+            </span>
+          </div>
+
+          <div className="flex flex-col items-center justify-center rounded-3xl border border-border/50 bg-card/50 py-5 transition-transform hover:scale-105">
+            {/* <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600">
+              <PlayCircle className="h-5 w-5" />
+            </div> */}
+            <span className="text-sm font-black text-foreground">
+              {quiz.plays >= 1000
+                ? `${(quiz.plays / 1000).toFixed(1)}K`
+                : quiz.plays}
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">
+              Plays
+            </span>
           </div>
         </div>
 
@@ -216,27 +260,27 @@ export default function QuizOverviewPage() {
             ))}
           </div>
         </section> */}
-
-        
       </main>
 
       {/* ── Bottom Actions ── */}
       <div className="fixed bottom-0 left-0 z-50 w-full border-t bg-background/95 p-6 backdrop-blur-sm sm:px-10">
         <div className="mx-auto flex max-w-2xl gap-4">
-          <Button 
-            variant="secondary" 
+          <Button
+            variant="secondary"
             className="h-14 flex-1 rounded-2xl bg-[#F4F7FF] text-[#4A5568] font-bold text-base hover:bg-muted/80 border-none transition-all"
             onClick={() => router.back()}
           >
             Exit
           </Button>
-          <Button 
+          <Button
             className="h-14 flex-[2] rounded-2xl bg-gradient-to-r from-[#9D4EDD] to-[#7B2CBF] text-white font-bold text-lg shadow-lg shadow-purple-600/30 transition-transform active:scale-95 group"
             onClick={handleStartQuiz}
             disabled={starting}
           >
             {starting ? "Starting..." : "Start Quiz"}
-            {!starting && <Play className="ml-2 h-5 w-5 fill-current group-hover:translate-x-1 transition-transform" />}
+            {!starting && (
+              <Play className="ml-2 h-5 w-5 fill-current group-hover:translate-x-1 transition-transform" />
+            )}
           </Button>
         </div>
       </div>

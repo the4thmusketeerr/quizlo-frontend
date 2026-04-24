@@ -352,6 +352,43 @@ export async function getUserQuizzes(): Promise<UserQuizzesResponse> {
   }
 }
 
+
+/*
+Change username
+*/
+export async function changeUsername(username: string): Promise<UserResponse> {
+  try {
+    const token = getToken();
+
+    const response = await fetch(`${API_BASE_URL}/user/change-username`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ username }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to update username.");
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unexpected error occurred while updating username.");
+  }
+}
+
+
+
+
+
+
 /**
  * Fetch dashboard data for the authenticated user
  */

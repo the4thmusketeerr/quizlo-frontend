@@ -11,6 +11,7 @@ import {
   Mail, 
   Lock, 
   Shield, 
+  Eye,
   Bell, 
   Moon, 
   Volume2, 
@@ -146,8 +147,8 @@ export default function SettingsPage() {
             <div className="relative">
               <Avatar className="h-20 w-20 border-2 border-white dark:border-border shadow-sm">
                 <AvatarImage src={profileData.avatar} />
-                <AvatarFallback className="bg-[#A855F7] text-white text-xl">
-                  {profileData.firstName?.[0]?.toUpperCase() + profileData.lastName?.[0]?.toUpperCase() || "U"}
+                <AvatarFallback className="bg-muted">
+                  <img src="https://placehold.net/avatar.svg" alt="Avatar" className="h-full w-full object-cover" />
                 </AvatarFallback>
               </Avatar>
               {/* <div 
@@ -202,14 +203,22 @@ export default function SettingsPage() {
             <SettingsItem 
               icon={<Lock className="h-5 w-5 text-[#A855F7]" />} 
               label="Change Password" 
+              onClick={() => router.push("/settings/change-password")}
             />
             <SettingsItem 
               icon={<Shield className="h-5 w-5 text-[#A855F7]" />} 
+              label="Security" 
+              onClick={() => router.push("/settings/account-security")}
+            />
+            <SettingsItem 
+              icon={<Eye className="h-5 w-5 text-[#A855F7]" />} 
               label="Privacy Settings" 
+              onClick={() => router.push("/settings/privacy-settings")}
             />
             <SettingsItem 
               icon={<Bell className="h-5 w-5 text-[#A855F7]" />} 
               label="Notification Preferences" 
+              onClick={() => router.push("/settings/notifications-preference")}
             />
           </div>
         </div>

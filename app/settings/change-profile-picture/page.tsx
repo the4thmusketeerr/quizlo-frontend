@@ -220,8 +220,8 @@ export default function ChangeProfilePicturePage() {
           <div className="relative group">
             <Avatar className="h-28 w-28 md:h-32 md:w-32 border-[6px] border-white dark:border-card shadow-2xl ring-1 ring-slate-100 dark:ring-border/50">
               <AvatarImage src={selectedAvatar || ""} />
-              <AvatarFallback className="bg-[#A855F7] text-white text-3xl font-bold">
-                {profile?.firstName?.[0]?.toUpperCase() + profile?.lastName?.[0]?.toUpperCase() || "U"}
+              <AvatarFallback className="bg-muted">
+                <img src="https://placehold.net/avatar.svg" alt="Avatar" className="h-full w-full object-cover" />
               </AvatarFallback>
             </Avatar>
             {selectedAvatar && (
