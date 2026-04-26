@@ -128,7 +128,7 @@ export default function QuizOverviewPage() {
         </div>
       </header> */}
 
-      <main className="mx-auto max-w-2xl px-4 pt-24">
+      <main className="mx-auto max-w-2xl px-4 pt-6">
         {/* ── Badges — OUTSIDE the image card, above it ── */}
         <div className="flex items-center gap-2 mb-4 px-1">
           <Badge
